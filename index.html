@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crypto Wallet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -12,12 +13,37 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
+        :root {
+            --primary: #1e50a0;
+            --secondary: #2a5db0;
+            --accent: #4caf50;
+            --danger: #f44336;
+            --dark: #0a0e17;
+            --card: #1a2236;
+            --text: #ffffff;
+            --text-secondary: #8f9bba;
+        }
+        
         body {
-            background-color: #0a0e17;
-            color: white;
+            background-color: var(--dark);
+            color: var(--text);
             padding: 20px;
             max-width: 400px;
             margin: 0 auto;
+            padding-bottom: 80px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            font-weight: bold;
+            font-size: 20px;
+            color: var(--accent);
         }
         
         .balance-section {
@@ -32,7 +58,7 @@
         }
         
         .balance-change {
-            color: #4caf50;
+            color: var(--accent);
             font-size: 14px;
         }
         
@@ -43,9 +69,9 @@
         }
         
         .nav-button {
-            background-color: #1a2236;
+            background-color: var(--card);
             border: none;
-            color: white;
+            color: var(--text);
             padding: 12px 0;
             width: 18%;
             border-radius: 12px;
@@ -55,11 +81,11 @@
         }
         
         .nav-button:hover {
-            background-color: #252f48;
+            background-color: var(--secondary);
         }
         
         .banner {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             border-radius: 16px;
             padding: 16px;
             margin-bottom: 25px;
@@ -74,8 +100,8 @@
         }
         
         .banner-cta {
-            background-color: white;
-            color: #667eea;
+            background-color: var(--text);
+            color: var(--primary);
             border: none;
             padding: 8px 12px;
             border-radius: 20px;
@@ -98,59 +124,67 @@
         }
         
         .tab.active {
-            border-bottom: 2px solid #667eea;
-            color: #667eea;
+            border-bottom: 2px solid var(--accent);
+            color: var(--accent);
+        }
+        
+        .crypto-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
         }
         
         .crypto-card {
-            background-color: #1a2236;
+            background-color: var(--card);
             border-radius: 16px;
             padding: 16px;
-            margin-bottom: 20px;
-        }
-        
-        .crypto-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
         }
         
-        .crypto-name {
-            font-weight: bold;
-            font-size: 18px;
-        }
-        
-        .crypto-change {
-            color: #4caf50;
-            font-size: 14px;
-        }
-        
-        .crypto-details {
+        .crypto-info {
             display: flex;
-            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .crypto-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .crypto-details h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .crypto-details p {
+            font-size: 14px;
+            color: var(--text-secondary);
         }
         
         .crypto-amount {
-            font-size: 20px;
-            font-weight: bold;
+            text-align: right;
         }
         
-        .crypto-value {
-            font-size: 20px;
+        .crypto-amount .value {
+            font-size: 16px;
             font-weight: bold;
+            margin-bottom: 4px;
         }
         
-        .manage-button {
-            background-color: #252f48;
-            color: white;
-            border: none;
-            padding: 10px 0;
-            width: 100%;
-            border-radius: 12px;
-            margin-top: 15px;
-            font-weight: bold;
-            cursor: pointer;
+        .crypto-amount .change {
+            font-size: 14px;
+            color: var(--accent);
         }
         
         .section-title {
@@ -166,18 +200,25 @@
         }
         
         .mover-tag {
-            background-color: #252f48;
+            background-color: var(--card);
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 14px;
+            cursor: pointer;
         }
         
         .mover-tag.active {
-            background-color: #667eea;
+            background-color: var(--accent);
+        }
+        
+        .mover-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
         }
         
         .mover-card {
-            background-color: #1a2236;
+            background-color: var(--card);
             border-radius: 16px;
             padding: 16px;
             margin-bottom: 15px;
@@ -195,7 +236,7 @@
         
         .mover-stats {
             font-size: 12px;
-            color: #8f9bba;
+            color: var(--text-secondary);
         }
         
         .mover-price {
@@ -204,7 +245,7 @@
         }
         
         .mover-change {
-            color: #4caf50;
+            color: var(--accent);
             font-size: 14px;
         }
         
@@ -213,23 +254,24 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background-color: #0a0e17;
+            background-color: var(--dark);
             display: flex;
             justify-content: space-around;
             padding: 15px 0;
-            border-top: 1px solid #1a2236;
+            border-top: 1px solid var(--card);
             max-width: 400px;
             margin: 0 auto;
         }
         
         .nav-item {
             text-align: center;
-            color: #8f9bba;
+            color: var(--text-secondary);
             font-size: 12px;
+            cursor: pointer;
         }
         
         .nav-item.active {
-            color: #667eea;
+            color: var(--accent);
         }
         
         .modal {
@@ -246,11 +288,13 @@
         }
         
         .modal-content {
-            background-color: #1a2236;
+            background-color: var(--card);
             width: 90%;
             max-width: 350px;
             border-radius: 16px;
             padding: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
         .modal-header {
@@ -268,7 +312,7 @@
         .close-modal {
             background: none;
             border: none;
-            color: white;
+            color: var(--text);
             font-size: 24px;
             cursor: pointer;
         }
@@ -280,7 +324,7 @@
         .input-label {
             display: block;
             margin-bottom: 8px;
-            color: #8f9bba;
+            color: var(--text-secondary);
         }
         
         .input-field {
@@ -288,8 +332,8 @@
             padding: 12px;
             border-radius: 8px;
             border: 1px solid #2d374d;
-            background-color: #0a0e17;
-            color: white;
+            background-color: var(--dark);
+            color: var(--text);
         }
         
         .coin-selector {
@@ -297,13 +341,17 @@
             align-items: center;
             gap: 10px;
             margin-bottom: 15px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: var(--dark);
         }
         
         .coin-logo {
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background-color: #667eea;
+            background-color: var(--secondary);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -315,8 +363,8 @@
         }
         
         .modal-button {
-            background-color: #667eea;
-            color: white;
+            background-color: var(--primary);
+            color: var(--text);
             border: none;
             padding: 14px;
             width: 100%;
@@ -333,14 +381,14 @@
         }
         
         .blockchain-option {
-            background-color: #252f48;
+            background-color: var(--dark);
             padding: 8px 12px;
             border-radius: 8px;
             cursor: pointer;
         }
         
         .blockchain-option.active {
-            background-color: #667eea;
+            background-color: var(--primary);
         }
         
         .success-message {
@@ -351,6 +399,7 @@
         .success-icon {
             font-size: 48px;
             margin-bottom: 15px;
+            color: var(--accent);
         }
         
         .logo-input {
@@ -363,27 +412,221 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background-color: #667eea;
+            background-color: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             font-size: 20px;
         }
+        
+        .pump-dump-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .pump-button, .dump-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .pump-button {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .dump-button {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .swap-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .swap-input {
+            background-color: var(--dark);
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .swap-amount {
+            font-size: 18px;
+            font-weight: bold;
+            background: none;
+            border: none;
+            color: var(--text);
+            width: 60%;
+        }
+        
+        .swap-coin {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--card);
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        .swap-arrow {
+            text-align: center;
+            font-size: 24px;
+            color: var(--accent);
+        }
+        
+        .coin-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        
+        .coin-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .coin-option:hover {
+            background-color: var(--dark);
+        }
+        
+        .coin-price {
+            margin-left: auto;
+            font-weight: bold;
+        }
+        
+        .pl-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: var(--dark);
+            border-radius: 8px;
+        }
+        
+        .pl-positive {
+            color: var(--accent);
+        }
+        
+        .pl-negative {
+            color: var(--danger);
+        }
+        
+        .transaction-history {
+            margin-top: 20px;
+        }
+        
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--card);
+        }
+        
+        .transaction-details {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .transaction-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .transaction-info h4 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .transaction-info p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .transaction-amount {
+            text-align: right;
+        }
+        
+        .transaction-amount .value {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        
+        .transaction-amount .status {
+            font-size: 12px;
+            color: var(--accent);
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background-color: var(--dark);
+            border-radius: 2px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--accent);
+            width: 0%;
+            transition: width 2s;
+        }
+        
+        .swap-status {
+            text-align: center;
+            margin: 10px 0;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">CryptoWallet</div>
+        <div class="user-menu">
+            <i class="fas fa-bell"></i>
+        </div>
+    </div>
+    
     <!-- Balance Section -->
     <div class="balance-section">
         <div class="total-balance" id="balance">$10,806,370,737.65</div>
         <div class="balance-change">$0.05 (+3.53%)</div>
+        
+        <!-- Pump/Dump Controls -->
+        <div class="pump-dump-controls">
+            <button class="pump-button" id="pump-1000">PUMP +1000 USDT</button>
+            <button class="dump-button" id="dump-3000">DUMP -3000 USDT</button>
+        </div>
     </div>
     
     <!-- Navigation Buttons -->
     <div class="nav-buttons">
         <button class="nav-button" id="send-btn">Send</button>
         <button class="nav-button" id="fund-btn">Fund</button>
-        <button class="nav-button">Swap</button>
+        <button class="nav-button" id="swap-btn">Swap</button>
         <button class="nav-button">Sell</button>
         <button class="nav-button">Earn</button>
     </div>
@@ -396,21 +639,102 @@
     
     <!-- Tabs -->
     <div class="tabs">
-        <div class="tab active">Crypto</div>
-        <div class="tab">NFTs</div>
+        <div class="tab active" data-tab="crypto">Crypto</div>
+        <div class="tab" data-tab="nfts">NFTs</div>
     </div>
     
-    <!-- Crypto Card -->
-    <div class="crypto-card">
-        <div class="crypto-header">
-            <div class="crypto-name">SUTER</div>
-            <div class="crypto-change">$0.04216 +3.53%</div>
+    <!-- Crypto List -->
+    <div class="crypto-list" id="crypto-tab">
+        <!-- USDT Card -->
+        <div class="crypto-card">
+            <div class="crypto-info">
+                <div class="crypto-logo" style="background-color: #26a17a;">USDT</div>
+                <div class="crypto-details">
+                    <h3>Tether</h3>
+                    <p>USDT</p>
+                </div>
+            </div>
+            <div class="crypto-amount">
+                <div class="value" id="usdt-amount">81,763,673 USDT</div>
+                <div class="change">$81,763,673</div>
+            </div>
         </div>
-        <div class="crypto-details">
-            <div class="crypto-amount">39,299.67</div>
-            <div class="crypto-value">$1.65</div>
+        
+        <!-- BNB Card -->
+        <div class="crypto-card">
+            <div class="crypto-info">
+                <div class="crypto-logo" style="background-color: #f3ba2f;">BNB</div>
+                <div class="crypto-details">
+                    <h3>Binance Coin</h3>
+                    <p>BNB</p>
+                </div>
+            </div>
+            <div class="crypto-amount">
+                <div class="value" id="bnb-amount">467 BNB</div>
+                <div class="change">+2.4%</div>
+            </div>
         </div>
-        <button class="manage-button">Manage crypto</button>
+        
+        <!-- TRX Card -->
+        <div class="crypto-card">
+            <div class="crypto-info">
+                <div class="crypto-logo" style="background-color: #ff060a;">TRX</div>
+                <div class="crypto-details">
+                    <h3>TRON</h3>
+                    <p>TRX</p>
+                </div>
+            </div>
+            <div class="crypto-amount">
+                <div class="value" id="trx-amount">839,878,828 TRX</div>
+                <div class="change">+1.8%</div>
+            </div>
+        </div>
+        
+        <!-- TRUMP Card -->
+        <div class="crypto-card">
+            <div class="crypto-info">
+                <div class="crypto-logo" style="background-color: #c41e3a;">TRUMP</div>
+                <div class="crypto-details">
+                    <h3>Trump Coin</h3>
+                    <p>TRUMP</p>
+                </div>
+            </div>
+            <div class="crypto-amount">
+                <div class="value" id="trump-amount">986,672 TRUMP</div>
+                <div class="change">+5.2%</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- NFTs Tab (Hidden by default) -->
+    <div class="crypto-list" id="nfts-tab" style="display: none;">
+        <div class="crypto-card">
+            <div class="crypto-info">
+                <div class="crypto-logo" style="background-color: #8a2be2;">NFT</div>
+                <div class="crypto-details">
+                    <h3>Bored Ape #7421</h3>
+                    <p>Ethereum</p>
+                </div>
+            </div>
+            <div class="crypto-amount">
+                <div class="value">1 NFT</div>
+                <div class="change">$12,450</div>
+            </div>
+        </div>
+        
+        <div class="crypto-card">
+            <div class="crypto-info">
+                <div class="crypto-logo" style="background-color: #ff4500;">NFT</div>
+                <div class="crypto-details">
+                    <h3>CryptoPunk #5210</h3>
+                    <p>Ethereum</p>
+                </div>
+            </div>
+            <div class="crypto-amount">
+                <div class="value">1 NFT</div>
+                <div class="change">$24,800</div>
+            </div>
+        </div>
     </div>
     
     <!-- Top Movers Section -->
@@ -443,13 +767,80 @@
         <div class="mover-change">+24.2%</div>
     </div>
     
+    <!-- Transaction History -->
+    <div class="section-title">Recent Transactions</div>
+    <div class="transaction-history">
+        <div class="transaction-item">
+            <div class="transaction-details">
+                <div class="transaction-icon" style="background-color: #26a17a;">
+                    <i class="fas fa-arrow-up"></i>
+                </div>
+                <div class="transaction-info">
+                    <h4>Sent USDT</h4>
+                    <p>To: 0x1a2b...3c4d</p>
+                </div>
+            </div>
+            <div class="transaction-amount">
+                <div class="value">-1,000 USDT</div>
+                <div class="status">Completed</div>
+            </div>
+        </div>
+        
+        <div class="transaction-item">
+            <div class="transaction-details">
+                <div class="transaction-icon" style="background-color: #f3ba2f;">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <div class="transaction-info">
+                    <h4>Swapped BNB</h4>
+                    <p>To USDT</p>
+                </div>
+            </div>
+            <div class="transaction-amount">
+                <div class="value">+2,450 USDT</div>
+                <div class="status">Completed</div>
+            </div>
+        </div>
+        
+        <div class="transaction-item">
+            <div class="transaction-details">
+                <div class="transaction-icon" style="background-color: #4caf50;">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+                <div class="transaction-info">
+                    <h4>Received USDT</h4>
+                    <p>From: 0x5e6f...7g8h</p>
+                </div>
+            </div>
+            <div class="transaction-amount">
+                <div class="value">+5,000 USDT</div>
+                <div class="status">Completed</div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
-        <div class="nav-item active">Home</div>
-        <div class="nav-item">Trending</div>
-        <div class="nav-item">Swap</div>
-        <div class="nav-item">Earn</div>
-        <div class="nav-item">Discover</div>
+        <div class="nav-item active">
+            <i class="fas fa-home"></i>
+            <div>Home</div>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-chart-line"></i>
+            <div>Trending</div>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-exchange-alt"></i>
+            <div>Swap</div>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-coins"></i>
+            <div>Earn</div>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-compass"></i>
+            <div>Discover</div>
+        </div>
     </div>
     
     <!-- Send Modal -->
@@ -467,13 +858,13 @@
             
             <div class="input-group">
                 <label class="input-label">Amount</label>
-                <input type="text" class="input-field" placeholder="0.00">
+                <input type="text" class="input-field" id="send-amount" placeholder="0.00">
             </div>
             
             <div class="input-group">
                 <label class="input-label">Select Coin</label>
-                <div class="coin-selector">
-                    <div class="coin-logo">USDT</div>
+                <div class="coin-selector" id="send-coin-selector">
+                    <div class="coin-logo" style="background-color: #26a17a;">USDT</div>
                     <div class="coin-name">USDT</div>
                 </div>
             </div>
@@ -521,14 +912,100 @@
         </div>
     </div>
     
+    <!-- Swap Modal -->
+    <div class="modal" id="swap-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Swap Crypto</div>
+                <button class="close-modal" id="close-swap-modal">&times;</button>
+            </div>
+            
+            <div class="swap-container">
+                <div class="swap-input">
+                    <input type="text" class="swap-amount" id="swap-from-amount" placeholder="0.0" value="100">
+                    <div class="swap-coin" id="swap-from-coin">
+                        <div class="coin-logo" style="background-color: #26a17a;">USDT</div>
+                        <div class="coin-name">USDT</div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+                
+                <div class="swap-arrow">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+                
+                <div class="swap-input">
+                    <input type="text" class="swap-amount" id="swap-to-amount" placeholder="0.0" readonly>
+                    <div class="swap-coin" id="swap-to-coin">
+                        <div class="coin-logo" style="background-color: #f3ba2f;">BNB</div>
+                        <div class="coin-name">BNB</div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pl-indicator">
+                <div>Price Impact</div>
+                <div class="pl-positive">0.5%</div>
+            </div>
+            
+            <div class="pl-indicator">
+                <div>Minimum Received</div>
+                <div id="min-received">0.25 BNB</div>
+            </div>
+            
+            <div class="pl-indicator">
+                <div>Network Fee</div>
+                <div>$1.50</div>
+            </div>
+            
+            <button class="modal-button" id="confirm-swap">Swap</button>
+        </div>
+    </div>
+    
+    <!-- Coin Selection Modal -->
+    <div class="modal" id="coin-select-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Select a Coin</div>
+                <button class="close-modal" id="close-coin-select-modal">&times;</button>
+            </div>
+            
+            <div class="input-group">
+                <input type="text" class="input-field" placeholder="Search coins" id="coin-search">
+            </div>
+            
+            <div class="coin-list" id="coin-list">
+                <!-- Coin options will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+    
     <!-- Success Modal -->
     <div class="modal" id="success-modal">
         <div class="modal-content">
             <div class="success-message">
                 <div class="success-icon">✓</div>
-                <div class="modal-title">Transaction Successful</div>
-                <p>Your transaction has been completed successfully.</p>
+                <div class="modal-title" id="success-title">Transaction Successful</div>
+                <p id="success-message">Your transaction has been completed successfully.</p>
                 <button class="modal-button" id="close-success-modal">OK</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Swap Progress Modal -->
+    <div class="modal" id="swap-progress-modal">
+        <div class="modal-content">
+            <div class="success-message">
+                <div class="success-icon">
+                    <i class="fas fa-sync-alt fa-spin"></i>
+                </div>
+                <div class="modal-title">Processing Swap</div>
+                <div class="swap-status" id="swap-status">Confirming transaction...</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="swap-progress"></div>
+                </div>
+                <p>Please wait while we process your swap</p>
             </div>
         </div>
     </div>
@@ -537,86 +1014,508 @@
         // DOM Elements
         const sendBtn = document.getElementById('send-btn');
         const fundBtn = document.getElementById('fund-btn');
+        const swapBtn = document.getElementById('swap-btn');
         const sendModal = document.getElementById('send-modal');
         const fundModal = document.getElementById('fund-modal');
+        const swapModal = document.getElementById('swap-modal');
+        const coinSelectModal = document.getElementById('coin-select-modal');
         const successModal = document.getElementById('success-modal');
+        const swapProgressModal = document.getElementById('swap-progress-modal');
         const closeSendModal = document.getElementById('close-send-modal');
         const closeFundModal = document.getElementById('close-fund-modal');
+        const closeSwapModal = document.getElementById('close-swap-modal');
+        const closeCoinSelectModal = document.getElementById('close-coin-select-modal');
         const confirmSend = document.getElementById('confirm-send');
         const addFund = document.getElementById('add-fund');
+        const confirmSwap = document.getElementById('confirm-swap');
         const closeSuccessModal = document.getElementById('close-success-modal');
         const coinLogoText = document.getElementById('coin-logo-text');
         const logoPreview = document.getElementById('logo-preview');
         const balanceElement = document.getElementById('balance');
+        const pump1000Btn = document.getElementById('pump-1000');
+        const dump3000Btn = document.getElementById('dump-3000');
+        const swapFromCoin = document.getElementById('swap-from-coin');
+        const swapToCoin = document.getElementById('swap-to-coin');
+        const swapFromAmount = document.getElementById('swap-from-amount');
+        const swapToAmount = document.getElementById('swap-to-amount');
+        const coinList = document.getElementById('coin-list');
+        const coinSearch = document.getElementById('coin-search');
+        const swapProgress = document.getElementById('swap-progress');
+        const swapStatus = document.getElementById('swap-status');
+        const tabs = document.querySelectorAll('.tab');
+        const cryptoTab = document.getElementById('crypto-tab');
+        const nftsTab = document.getElementById('nfts-tab');
 
-        // Event Listeners
-        sendBtn.addEventListener('click', () => {
-            sendModal.style.display = 'flex';
-        });
-        
-        fundBtn.addEventListener('click', () => {
-            fundModal.style.display = 'flex';
-        });
-        
-        closeSendModal.addEventListener('click', () => {
-            sendModal.style.display = 'none';
-        });
-        
-        closeFundModal.addEventListener('click', () => {
-            fundModal.style.display = 'none';
-        });
-        
-        confirmSend.addEventListener('click', () => {
-            sendModal.style.display = 'none';
-            successModal.style.display = 'flex';
-        });
-        
-        addFund.addEventListener('click', () => {
-            const coinName = document.getElementById('coin-name').value;
-            const coinAmount = document.getElementById('coin-amount').value;
+        // Wallet state
+        let walletBalance = 10806370737.65;
+        let usdtBalance = 81763673;
+        let bnbBalance = 467;
+        let trxBalance = 839878828;
+        let trumpBalance = 986672;
+        let customCoins = [];
+        let selectedCoinForSwap = null;
+        let swapDirection = 'from'; // 'from' or 'to'
+
+        // Available coins for swapping
+        const availableCoins = [
+            { symbol: 'USDT', name: 'Tether', logoColor: '#26a17a', price: 1.00, balance: 81763673 },
+            { symbol: 'BNB', name: 'Binance Coin', logoColor: '#f3ba2f', price: 350.25, balance: 467 },
+            { symbol: 'BTC', name: 'Bitcoin', logoColor: '#f7931a', price: 42000.50, balance: 0 },
+            { symbol: 'ETH', name: 'Ethereum', logoColor: '#627eea', price: 2200.75, balance: 0 },
+            { symbol: 'TRX', name: 'TRON', logoColor: '#ff060a', price: 0.12, balance: 839878828 },
+            { symbol: 'TRUMP', name: 'Trump Coin', logoColor: '#c41e3a', price: 0.85, balance: 986672 },
+            { symbol: 'ADA', name: 'Cardano', logoColor: '#0033ad', price: 0.45, balance: 0 },
+            { symbol: 'DOT', name: 'Polkadot', logoColor: '#e6007a', price: 6.80, balance: 0 },
+            { symbol: 'XRP', name: 'Ripple', logoColor: '#23292f', price: 0.60, balance: 0 },
+            { symbol: 'DOGE', name: 'Dogecoin', logoColor: '#c2a633', price: 0.15, balance: 0 },
+            { symbol: 'SOL', name: 'Solana', logoColor: '#00ffbd', price: 100.25, balance: 0 },
+            { symbol: 'MATIC', name: 'Polygon', logoColor: '#8247e5', price: 0.85, balance: 0 }
+        ];
+
+        // Initialize the application
+        function init() {
+            updateBalanceDisplay();
+            updateCoinDisplays();
+            setupEventListeners();
+            loadCustomCoins();
+            populateCoinList();
+        }
+
+        // Set up all event listeners
+        function setupEventListeners() {
+            // Modal buttons
+            sendBtn.addEventListener('click', openSendModal);
+            fundBtn.addEventListener('click', openFundModal);
+            swapBtn.addEventListener('click', openSwapModal);
+            closeSendModal.addEventListener('click', closeSendModalHandler);
+            closeFundModal.addEventListener('click', closeFundModalHandler);
+            closeSwapModal.addEventListener('click', closeSwapModalHandler);
+            closeCoinSelectModal.addEventListener('click', closeCoinSelectModalHandler);
+            confirmSend.addEventListener('click', confirmSendHandler);
+            addFund.addEventListener('click', addFundHandler);
+            confirmSwap.addEventListener('click', confirmSwapHandler);
+            closeSuccessModal.addEventListener('click', closeSuccessModalHandler);
             
-            if (coinName && coinAmount) {
-                fundModal.style.display = 'none';
-                successModal.style.display = 'flex';
-                
-                // Here you would typically add the new coin to the wallet
-                // For this demo, we'll just show a success message
-            }
-        });
-        
-        closeSuccessModal.addEventListener('click', () => {
-            successModal.style.display = 'none';
-        });
-        
-        // Update logo preview when text changes
-        coinLogoText.addEventListener('input', () => {
-            const text = coinLogoText.value.substring(0, 2).toUpperCase();
-            logoPreview.textContent = text || 'C';
-        });
-        
-        // Close modals when clicking outside
-        window.addEventListener('click', (event) => {
-            if (event.target === sendModal) {
-                sendModal.style.display = 'none';
-            }
-            if (event.target === fundModal) {
-                fundModal.style.display = 'none';
-            }
-            if (event.target === successModal) {
-                successModal.style.display = 'none';
-            }
-        });
-        
-        // Format balance with commas
-        function formatBalance(balance) {
-            return '$' + parseFloat(balance).toLocaleString('en-US', {
+            // Pump/Dump buttons
+            pump1000Btn.addEventListener('click', () => pumpDumpUSDT(1000));
+            dump3000Btn.addEventListener('click', () => pumpDumpUSDT(-3000));
+            
+            // Logo preview update
+            coinLogoText.addEventListener('input', updateLogoPreview);
+            
+            // Swap coin selection
+            swapFromCoin.addEventListener('click', () => openCoinSelectModal('from'));
+            swapToCoin.addEventListener('click', () => openCoinSelectModal('to'));
+            
+            // Swap amount calculation
+            swapFromAmount.addEventListener('input', calculateSwapToAmount);
+            
+            // Coin search
+            coinSearch.addEventListener('input', filterCoinList);
+            
+            // Tab selection
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => selectTab(tab.dataset.tab));
+            });
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', (event) => {
+                if (event.target === sendModal) closeSendModalHandler();
+                if (event.target === fundModal) closeFundModalHandler();
+                if (event.target === swapModal) closeSwapModalHandler();
+                if (event.target === coinSelectModal) closeCoinSelectModalHandler();
+                if (event.target === successModal) closeSuccessModalHandler();
+                if (event.target === swapProgressModal) closeSwapProgressModalHandler();
+            });
+        }
+
+        // Update the balance display with proper formatting
+        function updateBalanceDisplay() {
+            balanceElement.textContent = formatCurrency(walletBalance);
+        }
+
+        // Update coin amount displays
+        function updateCoinDisplays() {
+            document.getElementById('usdt-amount').textContent = formatNumber(usdtBalance) + ' USDT';
+            document.getElementById('bnb-amount').textContent = formatNumber(bnbBalance) + ' BNB';
+            document.getElementById('trx-amount').textContent = formatNumber(trxBalance) + ' TRX';
+            document.getElementById('trump-amount').textContent = formatNumber(trumpBalance) + ' TRUMP';
+        }
+
+        // Format balance with commas and dollar sign
+        function formatCurrency(amount) {
+            return '$' + parseFloat(amount).toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             });
         }
-        
-        // Set initial balance
-        balanceElement.textContent = formatBalance('10806370737.65');
+
+        // Format number with commas
+        function formatNumber(amount) {
+            return parseFloat(amount).toLocaleString('en-US', {
+                maximumFractionDigits: 2
+            });
+        }
+
+        // Pump or dump USDT
+        function pumpDumpUSDT(amount) {
+            usdtBalance += amount;
+            walletBalance += amount;
+            
+            updateBalanceDisplay();
+            updateCoinDisplays();
+            
+            // Show notification
+            const action = amount > 0 ? 'added to' : 'removed from';
+            showSuccess(`$${Math.abs(amount)} USDT ${action} your wallet`, `USDT ${amount > 0 ? 'Pumped' : 'Dumped'}`);
+        }
+
+        // Open send modal
+        function openSendModal() {
+            sendModal.style.display = 'flex';
+        }
+
+        // Open fund modal
+        function openFundModal() {
+            fundModal.style.display = 'flex';
+        }
+
+        // Open swap modal
+        function openSwapModal() {
+            swapModal.style.display = 'flex';
+            calculateSwapToAmount();
+        }
+
+        // Open coin selection modal
+        function openCoinSelectModal(direction) {
+            swapDirection = direction;
+            coinSelectModal.style.display = 'flex';
+        }
+
+        // Close send modal
+        function closeSendModalHandler() {
+            sendModal.style.display = 'none';
+            resetSendForm();
+        }
+
+        // Close fund modal
+        function closeFundModalHandler() {
+            fundModal.style.display = 'none';
+            resetFundForm();
+        }
+
+        // Close swap modal
+        function closeSwapModalHandler() {
+            swapModal.style.display = 'none';
+        }
+
+        // Close coin select modal
+        function closeCoinSelectModalHandler() {
+            coinSelectModal.style.display = 'none';
+        }
+
+        // Close success modal
+        function closeSuccessModalHandler() {
+            successModal.style.display = 'none';
+        }
+
+        // Close swap progress modal
+        function closeSwapProgressModalHandler() {
+            // Don't allow closing during swap
+        }
+
+        // Handle send confirmation
+        function confirmSendHandler() {
+            const recipient = document.querySelector('#send-modal .input-field[placeholder="Enter wallet address"]').value;
+            const amount = parseFloat(document.getElementById('send-amount').value);
+            
+            if (!recipient || !amount) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            if (amount <= 0) {
+                alert('Amount must be greater than 0');
+                return;
+            }
+            
+            if (amount > usdtBalance) {
+                alert('Insufficient USDT balance');
+                return;
+            }
+            
+            // Update balances
+            usdtBalance -= amount;
+            walletBalance -= amount;
+            
+            updateBalanceDisplay();
+            updateCoinDisplays();
+            
+            sendModal.style.display = 'none';
+            showSuccess(`Successfully sent ${formatCurrency(amount)} USDT`, 'Transaction Sent');
+            
+            // Reset form
+            resetSendForm();
+        }
+
+        // Handle adding funds (creating custom coin)
+        function addFundHandler() {
+            const coinName = document.getElementById('coin-name').value;
+            const coinLogo = document.getElementById('coin-logo-text').value || 'C';
+            const amount = parseFloat(document.getElementById('coin-amount').value);
+            
+            if (!coinName || !amount) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            if (amount <= 0) {
+                alert('Amount must be greater than 0');
+                return;
+            }
+            
+            // Create new coin object
+            const newCoin = {
+                id: Date.now(),
+                name: coinName,
+                symbol: coinLogo.substring(0, 3).toUpperCase(),
+                logo: coinLogo.substring(0, 2).toUpperCase(),
+                amount: amount,
+                value: amount,
+                change: '+0.0%'
+            };
+            
+            // Add to custom coins array
+            customCoins.push(newCoin);
+            
+            // Update wallet balance
+            walletBalance += amount;
+            updateBalanceDisplay();
+            
+            // Show success
+            fundModal.style.display = 'none';
+            showSuccess(`Successfully added ${formatCurrency(amount)} ${newCoin.symbol}`, 'Funds Added');
+            
+            // Reset form
+            resetFundForm();
+        }
+
+        // Handle swap confirmation
+        function confirmSwapHandler() {
+            const fromCoinElement = document.querySelector('#swap-from-coin .coin-name').textContent;
+            const toCoinElement = document.querySelector('#swap-to-coin .coin-name').textContent;
+            const fromAmount = parseFloat(swapFromAmount.value);
+            
+            if (!fromAmount || fromAmount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+            
+            // Check if user has enough balance
+            const fromCoin = availableCoins.find(coin => coin.symbol === fromCoinElement);
+            if (fromAmount > fromCoin.balance) {
+                alert(`Insufficient ${fromCoin.symbol} balance`);
+                return;
+            }
+            
+            // Show swap progress
+            swapProgressModal.style.display = 'flex';
+            swapProgress.style.width = '0%';
+            
+            // Simulate swap process with progress
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                swapProgress.style.width = `${progress}%`;
+                
+                if (progress <= 25) {
+                    swapStatus.textContent = 'Confirming transaction...';
+                } else if (progress <= 50) {
+                    swapStatus.textContent = 'Processing on blockchain...';
+                } else if (progress <= 75) {
+                    swapStatus.textContent = 'Executing swap...';
+                } else {
+                    swapStatus.textContent = 'Finalizing...';
+                }
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    completeSwap(fromCoinElement, toCoinElement, fromAmount);
+                }
+            }, 100);
+        }
+
+        // Complete the swap transaction
+        function completeSwap(fromSymbol, toSymbol, fromAmount) {
+            const fromCoin = availableCoins.find(coin => coin.symbol === fromSymbol);
+            const toCoin = availableCoins.find(coin => coin.symbol === toSymbol);
+            
+            // Calculate received amount (simplified)
+            const toAmount = fromAmount * fromCoin.price / toCoin.price * 0.995; // 0.5% fee
+            
+            // Update balances
+            fromCoin.balance -= fromAmount;
+            toCoin.balance += toAmount;
+            
+            // Update USDT balance specifically if involved
+            if (fromSymbol === 'USDT') {
+                usdtBalance = fromCoin.balance;
+            } else if (toSymbol === 'USDT') {
+                usdtBalance = toCoin.balance;
+            }
+            
+            // Update wallet balance (simplified)
+            walletBalance = usdtBalance + 
+                           bnbBalance * availableCoins.find(c => c.symbol === 'BNB').price +
+                           trxBalance * availableCoins.find(c => c.symbol === 'TRX').price +
+                           trumpBalance * availableCoins.find(c => c.symbol === 'TRUMP').price;
+            
+            updateBalanceDisplay();
+            updateCoinDisplays();
+            
+            // Close modals and show success
+            swapProgressModal.style.display = 'none';
+            swapModal.style.display = 'none';
+            showSuccess(`Successfully swapped ${fromAmount} ${fromSymbol} for ${toAmount.toFixed(6)} ${toSymbol}`, 'Swap Completed');
+        }
+
+        // Calculate swap amount
+        function calculateSwapToAmount() {
+            const fromCoinElement = document.querySelector('#swap-from-coin .coin-name').textContent;
+            const toCoinElement = document.querySelector('#swap-to-coin .coin-name').textContent;
+            const fromAmount = parseFloat(swapFromAmount.value) || 0;
+            
+            const fromCoin = availableCoins.find(coin => coin.symbol === fromCoinElement);
+            const toCoin = availableCoins.find(coin => coin.symbol === toCoinElement);
+            
+            if (fromCoin && toCoin) {
+                const toAmount = fromAmount * fromCoin.price / toCoin.price * 0.995; // 0.5% fee
+                swapToAmount.value = toAmount.toFixed(6);
+                
+                // Update minimum received
+                document.getElementById('min-received').textContent = `${(toAmount * 0.99).toFixed(6)} ${toCoin.symbol}`;
+            }
+        }
+
+        // Populate coin list for selection
+        function populateCoinList() {
+            coinList.innerHTML = '';
+            
+            availableCoins.forEach(coin => {
+                const coinOption = document.createElement('div');
+                coinOption.className = 'coin-option';
+                coinOption.innerHTML = `
+                    <div class="coin-logo" style="background-color: ${coin.logoColor};">${coin.symbol}</div>
+                    <div>
+                        <div style="font-weight: bold;">${coin.symbol}</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">${coin.name}</div>
+                    </div>
+                    <div class="coin-price">${formatCurrency(coin.price)}</div>
+                `;
+                
+                coinOption.addEventListener('click', () => selectCoinForSwap(coin));
+                coinList.appendChild(coinOption);
+            });
+        }
+
+        // Filter coin list based on search
+        function filterCoinList() {
+            const searchTerm = coinSearch.value.toLowerCase();
+            const coinOptions = document.querySelectorAll('.coin-option');
+            
+            coinOptions.forEach(option => {
+                const coinSymbol = option.querySelector('div:first-child div:first-child').textContent.toLowerCase();
+                const coinName = option.querySelector('div:first-child div:last-child').textContent.toLowerCase();
+                
+                if (coinSymbol.includes(searchTerm) || coinName.includes(searchTerm)) {
+                    option.style.display = 'flex';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+        }
+
+        // Select coin for swap
+        function selectCoinForSwap(coin) {
+            if (swapDirection === 'from') {
+                swapFromCoin.innerHTML = `
+                    <div class="coin-logo" style="background-color: ${coin.logoColor};">${coin.symbol}</div>
+                    <div class="coin-name">${coin.symbol}</div>
+                    <i class="fas fa-chevron-down"></i>
+                `;
+            } else {
+                swapToCoin.innerHTML = `
+                    <div class="coin-logo" style="background-color: ${coin.logoColor};">${coin.symbol}</div>
+                    <div class="coin-name">${coin.symbol}</div>
+                    <i class="fas fa-chevron-down"></i>
+                `;
+            }
+            
+            coinSelectModal.style.display = 'none';
+            calculateSwapToAmount();
+        }
+
+        // Update logo preview
+        function updateLogoPreview() {
+            const text = coinLogoText.value.substring(0, 2).toUpperCase();
+            logoPreview.textContent = text || 'C';
+        }
+
+        // Select tab
+        function selectTab(tabName) {
+            tabs.forEach(tab => {
+                if (tab.dataset.tab === tabName) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            if (tabName === 'crypto') {
+                cryptoTab.style.display = 'flex';
+                nftsTab.style.display = 'none';
+            } else {
+                cryptoTab.style.display = 'none';
+                nftsTab.style.display = 'flex';
+            }
+        }
+
+        // Reset send form
+        function resetSendForm() {
+            document.querySelector('#send-modal .input-field[placeholder="Enter wallet address"]').value = '';
+            document.getElementById('send-amount').value = '';
+        }
+
+        // Reset fund form
+        function resetFundForm() {
+            document.getElementById('coin-name').value = '';
+            document.getElementById('coin-logo-text').value = '';
+            document.getElementById('coin-amount').value = '';
+            logoPreview.textContent = 'C';
+        }
+
+        // Show success message
+        function showSuccess(message, title) {
+            document.getElementById('success-title').textContent = title;
+            document.getElementById('success-message').textContent = message;
+            successModal.style.display = 'flex';
+        }
+
+        // Save custom coins to localStorage
+        function saveCustomCoins() {
+            localStorage.setItem('customCoins', JSON.stringify(customCoins));
+        }
+
+        // Load custom coins from localStorage
+        function loadCustomCoins() {
+            const storedCoins = localStorage.getItem('customCoins');
+            if (storedCoins) {
+                customCoins = JSON.parse(storedCoins);
+            }
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
