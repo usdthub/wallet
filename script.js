@@ -1,4 +1,4 @@
-// script.js
+// script.js - Trust Wallet Clone
 
 // DOM Elements
 const sendBtn = document.getElementById('send-btn');
@@ -18,8 +18,6 @@ const confirmSend = document.getElementById('confirm-send');
 const addFund = document.getElementById('add-fund');
 const confirmSwap = document.getElementById('confirm-swap');
 const closeSuccessModal = document.getElementById('close-success-modal');
-const coinLogoText = document.getElementById('coin-logo-text');
-const logoPreview = document.getElementById('logo-preview');
 const balanceElement = document.getElementById('balance');
 const pump1000Btn = document.getElementById('pump-1000');
 const dump3000Btn = document.getElementById('dump-3000');
@@ -35,8 +33,15 @@ const tabs = document.querySelectorAll('.tab');
 const cryptoTab = document.getElementById('crypto-tab');
 const nftsTab = document.getElementById('nfts-tab');
 const blockchainOptions = document.querySelectorAll('.blockchain-option');
-const moverTags = document.querySelectorAll('.mover-tag');
-const navItems = document.querySelectorAll('.nav-item');
+const gasOptions = document.querySelectorAll('.gas-option');
+const recipientAddress = document.getElementById('recipient-address');
+const sendAmount = document.getElementById('send-amount');
+const sendMemo = document.getElementById('send-memo');
+const coinName = document.getElementById('coin-name');
+const coinSymbol = document.getElementById('coin-symbol');
+const coinLogoUrl = document.getElementById('coin-logo-url');
+const coinAmount = document.getElementById('coin-amount');
+const feeAmount = document.querySelector('.fee-amount');
 
 // Wallet state
 let walletBalance = 10806370737.65;
@@ -47,50 +52,197 @@ let trumpBalance = 986672;
 let customCoins = [];
 let selectedCoinForSwap = null;
 let swapDirection = 'from'; // 'from' or 'to'
+let currentBlockchain = 'bsc';
+let currentGasOption = 'standard';
+let transactions = [];
+let priceUpdateInterval;
 
-// Available coins for swapping
+// Available coins for swapping with real data
 const availableCoins = [
-    { symbol: 'USDT', name: 'Tether', logoColor: '#26a17a', price: 1.00, balance: 81763673 },
-    { symbol: 'BNB', name: 'Binance Coin', logoColor: '#f3ba2f', price: 350.25, balance: 467 },
-    { symbol: 'BTC', name: 'Bitcoin', logoColor: '#f7931a', price: 42000.50, balance: 0 },
-    { symbol: 'ETH', name: 'Ethereum', logoColor: '#627eea', price: 2200.75, balance: 0 },
-    { symbol: 'TRX', name: 'TRON', logoColor: '#ff060a', price: 0.12, balance: 839878828 },
-    { symbol: 'TRUMP', name: 'Trump Coin', logoColor: '#c41e3a', price: 0.85, balance: 986672 },
-    { symbol: 'ADA', name: 'Cardano', logoColor: '#0033ad', price: 0.45, balance: 0 },
-    { symbol: 'DOT', name: 'Polkadot', logoColor: '#e6007a', price: 6.80, balance: 0 },
-    { symbol: 'XRP', name: 'Ripple', logoColor: '#23292f', price: 0.60, balance: 0 },
-    { symbol: 'DOGE', name: 'Dogecoin', logoColor: '#c2a633', price: 0.15, balance: 0 },
-    { symbol: 'SOL', name: 'Solana', logoColor: '#00ffbd', price: 100.25, balance: 0 },
-    { symbol: 'MATIC', name: 'Polygon', logoColor: '#8247e5', price: 0.85, balance: 0 },
-    { symbol: 'LTC', name: 'Litecoin', logoColor: '#345d9d', price: 75.30, balance: 0 },
-    { symbol: 'LINK', name: 'Chainlink', logoColor: '#2a5ada', price: 15.75, balance: 0 },
-    { symbol: 'XLM', name: 'Stellar', logoColor: '#14b6e7', price: 0.12, balance: 0 },
-    { symbol: 'BCH', name: 'Bitcoin Cash', logoColor: '#8dc351', price: 250.80, balance: 0 },
-    { symbol: 'ETC', name: 'Ethereum Classic', logoColor: '#3c8031', price: 25.40, balance: 0 },
-    { symbol: 'FIL', name: 'Filecoin', logoColor: '#0090ff', price: 5.65, balance: 0 },
-    { symbol: 'EOS', name: 'EOS', logoColor: '#000000', price: 0.85, balance: 0 },
-    { symbol: 'XTZ', name: 'Tezos', logoColor: '#2c7df7', price: 1.05, balance: 0 },
-    { symbol: 'AAVE', name: 'Aave', logoColor: '#b6509e', price: 120.75, balance: 0 },
-    { symbol: 'UNI', name: 'Uniswap', logoColor: '#ff007a', price: 7.50, balance: 0 },
-    { symbol: 'COMP', name: 'Compound', logoColor: '#00d395', price: 55.30, balance: 0 },
-    { symbol: 'MKR', name: 'Maker', logoColor: '#1aab9b', price: 1500.25, balance: 0 },
-    { symbol: 'SNX', name: 'Synthetix', logoColor: '#00d1ff', price: 3.25, balance: 0 },
-    { symbol: 'YFI', name: 'Yearn Finance', logoColor: '#006ae3', price: 8500.75, balance: 0 },
-    { symbol: 'SUSHI', name: 'SushiSwap', logoColor: '#fa52a0', price: 1.25, balance: 0 },
-    { symbol: 'CRV', name: 'Curve DAO', logoColor: '#40649f', price: 0.65, balance: 0 },
-    { symbol: 'BAT', name: 'Basic Attention', logoColor: '#ff5000', price: 0.25, balance: 0 },
-    { symbol: 'ZRX', name: '0x', logoColor: '#302c2c', price: 0.35, balance: 0 },
-    { symbol: 'REP', name: 'Augur', logoColor: '#5e2ca5', price: 12.50, balance: 0 },
-    { symbol: 'KNC', name: 'Kyber Network', logoColor: '#31cb9e', price: 0.75, balance: 0 },
-    { symbol: 'BAL', name: 'Balancer', logoColor: '#1e1e1e', price: 4.25, balance: 0 },
-    { symbol: 'REN', name: 'Ren', logoColor: '#001c3a', price: 0.10, balance: 0 },
-    { symbol: 'UMA', name: 'UMA', logoColor: '#ff4a4a', price: 2.15, balance: 0 },
-    { symbol: 'BAND', name: 'Band Protocol', logoColor: '#516aff', price: 1.75, balance: 0 },
-    { symbol: 'NMR', name: 'Numeraire', logoColor: '#0500ff', price: 25.80, balance: 0 },
-    { symbol: 'OCEAN', name: 'Ocean Protocol', logoColor: '#141414', price: 0.45, balance: 0 },
-    { symbol: 'CVC', name: 'Civic', logoColor: '#3ab03e', price: 0.15, balance: 0 },
-    { symbol: 'GNT', name: 'Golem', logoColor: '#001d57', price: 0.05, balance: 0 }
+    { 
+        symbol: 'USDT', 
+        name: 'Tether', 
+        logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png', 
+        price: 1.00, 
+        balance: 81763673, 
+        pnl: 1245.67, 
+        sl: 0.998,
+        change: 0.1,
+        color: '#26a17a'
+    },
+    { 
+        symbol: 'BNB', 
+        name: 'Binance Coin', 
+        logo: 'https://cryptologos.cc/logos/bnb-bnb-logo.png', 
+        price: 350.25, 
+        balance: 467, 
+        pnl: 3456.78, 
+        sl: 320.50,
+        change: 2.4,
+        color: '#f3ba2f'
+    },
+    { 
+        symbol: 'BTC', 
+        name: 'Bitcoin', 
+        logo: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png', 
+        price: 42000.50, 
+        balance: 0, 
+        pnl: 0, 
+        sl: 0,
+        change: 1.2,
+        color: '#f7931a'
+    },
+    { 
+        symbol: 'ETH', 
+        name: 'Ethereum', 
+        logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', 
+        price: 2200.75, 
+        balance: 0, 
+        pnl: 0, 
+        sl: 0,
+        change: -0.8,
+        color: '#627eea'
+    },
+    { 
+        symbol: 'TRX', 
+        name: 'TRON', 
+        logo: 'https://cryptologos.cc/logos/tron-trx-logo.png', 
+        price: 0.12, 
+        balance: 839878828, 
+        pnl: 2134.56, 
+        sl: 0.115,
+        change: 1.8,
+        color: '#ff060a'
+    },
+    { 
+        symbol: 'TRUMP', 
+        name: 'Trump Coin', 
+        logo: 'https://cryptologos.cc/logos/maga-trump-maga-logo.png', 
+        price: 0.85, 
+        balance: 986672, 
+        pnl: 1567.89, 
+        sl: 0.78,
+        change: 5.2,
+        color: '#c41e3a'
+    },
+    { 
+        symbol: 'ADA', 
+        name: 'Cardano', 
+        logo: 'https://cryptologos.cc/logos/cardano-ada-logo.png', 
+        price: 0.45, 
+        balance: 0, 
+        pnl: 0, 
+        sl: 0,
+        change: 0.5,
+        color: '#0033ad'
+    },
+    { 
+        symbol: 'DOT', 
+        name: 'Polkadot', 
+        logo: 'https://cryptologos.cc/logos/polkadot-new-dot-logo.png', 
+        price: 6.80, 
+        balance: 0, 
+        pnl: 0, 
+        sl: 0,
+        change: -1.2,
+        color: '#e6007a'
+    },
+    { 
+        symbol: 'XRP', 
+        name: 'Ripple', 
+        logo: 'https://cryptologos.cc/logos/xrp-xrp-logo.png', 
+        price: 0.60, 
+        balance: 0, 
+        pnl: 0, 
+        sl: 0,
+        change: 0.3,
+        color: '#23292f'
+    },
+    { 
+        symbol: 'DOGE', 
+        name: 'Dogecoin', 
+        logo: 'https://cryptologos.cc/logos/dogecoin-doge-logo.png', 
+        price: 0.15, 
+        balance: 0, 
+        pnl: 0, 
+        sl: 0,
+        change: 8.7,
+        color: '#c2a633'
+    },
+    { 
+        symbol: 'SOL', 
+        name: 'Solana', 
+        logo: 'https://cryptologos.cc/logos/solana-sol-logo.png', 
+        price: 100.25, 
+        balance: 0, 
+        pnl: 0, 
+        sl: 0,
+        change: 3.4,
+        color: '#00ffbd'
+    },
+    { 
+        symbol: 'MATIC', 
+        name: 'Polygon', 
+        logo: 'https://cryptologos.cc/logos/polygon-matic-logo.png', 
+        price: 0.85, 
+        balance: 0, 
+        pnl: 0, 
+        sl: 0,
+        change: -0.5,
+        color: '#8247e5'
+    }
 ];
+
+// Blockchain networks data
+const blockchainNetworks = {
+    bsc: {
+        name: 'Binance Smart Chain',
+        symbol: 'BSC',
+        logo: 'https://cryptologos.cc/logos/bnb-bnb-logo.png',
+        baseFee: 1.23,
+        gasLimit: 21000
+    },
+    ethereum: {
+        name: 'Ethereum',
+        symbol: 'ETH',
+        logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+        baseFee: 5.67,
+        gasLimit: 21000
+    },
+    polygon: {
+        name: 'Polygon',
+        symbol: 'MATIC',
+        logo: 'https://cryptologos.cc/logos/polygon-matic-logo.png',
+        baseFee: 0.12,
+        gasLimit: 21000
+    },
+    tron: {
+        name: 'TRON',
+        symbol: 'TRX',
+        logo: 'https://cryptologos.cc/logos/tron-trx-logo.png',
+        baseFee: 0.05,
+        gasLimit: 21000
+    }
+};
+
+// Gas options
+const gasOptionsData = {
+    standard: {
+        name: 'Standard',
+        time: '~ 5 seconds',
+        multiplier: 1
+    },
+    fast: {
+        name: 'Fast',
+        time: '~ 3 seconds',
+        multiplier: 2
+    },
+    instant: {
+        name: 'Instant',
+        time: '~ 1 second',
+        multiplier: 4
+    }
+};
 
 // Initialize the application
 function init() {
@@ -99,7 +251,15 @@ function init() {
     setupEventListeners();
     loadCustomCoins();
     populateCoinList();
-    updatePriceChanges();
+    updateGasPrices();
+    startPriceUpdates();
+    loadTransactionHistory();
+    updateNetworkStatus();
+    
+    // Add sample transactions if none exist
+    if (transactions.length === 0) {
+        addSampleTransactions();
+    }
 }
 
 // Set up all event listeners
@@ -121,9 +281,6 @@ function setupEventListeners() {
     pump1000Btn.addEventListener('click', () => pumpDumpUSDT(1000));
     dump3000Btn.addEventListener('click', () => pumpDumpUSDT(-3000));
     
-    // Logo preview update
-    coinLogoText.addEventListener('input', updateLogoPreview);
-    
     // Swap coin selection
     swapFromCoin.addEventListener('click', () => openCoinSelectModal('from'));
     swapToCoin.addEventListener('click', () => openCoinSelectModal('to'));
@@ -144,15 +301,17 @@ function setupEventListeners() {
         option.addEventListener('click', selectBlockchain);
     });
     
-    // Mover tags selection
-    moverTags.forEach(tag => {
-        tag.addEventListener('click', selectMoverTag);
+    // Gas option selection
+    gasOptions.forEach(option => {
+        option.addEventListener('click', selectGasOption);
     });
     
-    // Nav items selection
-    navItems.forEach(item => {
-        item.addEventListener('click', selectNavItem);
-    });
+    // Form validation
+    recipientAddress.addEventListener('input', validateAddress);
+    sendAmount.addEventListener('input', validateSendAmount);
+    coinName.addEventListener('input', validateFundForm);
+    coinSymbol.addEventListener('input', validateFundForm);
+    coinAmount.addEventListener('input', validateFundForm);
     
     // Close modals when clicking outside
     window.addEventListener('click', (event) => {
@@ -166,6 +325,10 @@ function setupEventListeners() {
     
     // Keyboard shortcuts
     document.addEventListener('keydown', handleKeyboardShortcuts);
+    
+    // Online/offline detection
+    window.addEventListener('online', updateNetworkStatus);
+    window.addEventListener('offline', updateNetworkStatus);
 }
 
 // Handle keyboard shortcuts
@@ -212,6 +375,36 @@ function updateCoinDisplays() {
     document.getElementById('bnb-amount').textContent = formatNumber(bnbBalance) + ' BNB';
     document.getElementById('trx-amount').textContent = formatNumber(trxBalance) + ' TRX';
     document.getElementById('trump-amount').textContent = formatNumber(trumpBalance) + ' TRUMP';
+    
+    // Update PnL displays
+    updatePnLDisplays();
+}
+
+// Update PnL displays for all coins
+function updatePnLDisplays() {
+    const cryptoCards = document.querySelectorAll('.crypto-card');
+    
+    cryptoCards.forEach(card => {
+        const coinSymbol = card.dataset.coin;
+        const coin = availableCoins.find(c => c.symbol === coinSymbol);
+        
+        if (coin) {
+            const pnlValue = card.querySelector('.pnl-value');
+            const changeElement = card.querySelector('.change');
+            
+            if (pnlValue) {
+                const isPositive = coin.pnl >= 0;
+                pnlValue.textContent = `${isPositive ? '+' : ''}$${Math.abs(coin.pnl).toFixed(2)}`;
+                pnlValue.className = `pnl-value ${isPositive ? 'positive' : 'negative'}`;
+            }
+            
+            if (changeElement) {
+                const isPositive = coin.change >= 0;
+                changeElement.textContent = `${isPositive ? '+' : ''}${coin.change.toFixed(2)}%`;
+                changeElement.className = `change ${isPositive ? 'positive' : 'negative'}`;
+            }
+        }
+    });
 }
 
 // Format balance with commas and dollar sign
@@ -231,11 +424,31 @@ function formatNumber(amount) {
 
 // Pump or dump USDT
 function pumpDumpUSDT(amount) {
+    // Validate amount
+    if (amount < 0 && Math.abs(amount) > usdtBalance) {
+        showError('Insufficient USDT balance for this operation');
+        return;
+    }
+    
     usdtBalance += amount;
     walletBalance += amount;
     
     updateBalanceDisplay();
     updateCoinDisplays();
+    
+    // Add transaction
+    const transaction = {
+        id: Date.now(),
+        type: amount > 0 ? 'deposit' : 'withdrawal',
+        coin: 'USDT',
+        amount: Math.abs(amount),
+        value: Math.abs(amount),
+        status: 'completed',
+        timestamp: new Date(),
+        description: amount > 0 ? 'USDT Pump' : 'USDT Dump'
+    };
+    
+    addTransaction(transaction);
     
     // Show notification
     const action = amount > 0 ? 'added to' : 'removed from';
@@ -245,11 +458,14 @@ function pumpDumpUSDT(amount) {
 // Open send modal
 function openSendModal() {
     sendModal.style.display = 'flex';
+    updateGasPrices();
+    resetSendForm();
 }
 
 // Open fund modal
 function openFundModal() {
     fundModal.style.display = 'flex';
+    resetFundForm();
 }
 
 // Open swap modal
@@ -300,29 +516,33 @@ function closeSwapProgressModalHandler() {
 
 // Handle send confirmation
 function confirmSendHandler() {
-    const recipient = document.querySelector('#send-modal .input-field[placeholder="Enter wallet address"]').value;
-    const amount = parseFloat(document.getElementById('send-amount').value);
+    const recipient = recipientAddress.value.trim();
+    const amount = parseFloat(sendAmount.value);
+    const memo = sendMemo.value.trim();
     
     if (!recipient || !amount) {
-        alert('Please fill in all fields');
+        showError('Please fill in all required fields');
         return;
     }
     
     if (amount <= 0) {
-        alert('Amount must be greater than 0');
+        showError('Amount must be greater than 0');
         return;
     }
     
     if (amount > usdtBalance) {
-        alert('Insufficient USDT balance');
+        showError('Insufficient USDT balance');
         return;
     }
     
-    // Validate recipient address (basic check)
+    // Validate recipient address
     if (!isValidAddress(recipient)) {
-        alert('Please enter a valid wallet address');
+        showError('Please enter a valid wallet address');
         return;
     }
+    
+    // Get transaction fee
+    const fee = calculateTransactionFee();
     
     // Update balances
     usdtBalance -= amount;
@@ -331,11 +551,26 @@ function confirmSendHandler() {
     updateBalanceDisplay();
     updateCoinDisplays();
     
-    sendModal.style.display = 'none';
-    showSuccess(`Successfully sent ${formatCurrency(amount)} USDT`, 'Transaction Sent');
+    // Create transaction record
+    const transaction = {
+        id: Date.now(),
+        type: 'send',
+        coin: 'USDT',
+        amount: -amount,
+        value: amount,
+        status: 'completed',
+        timestamp: new Date(),
+        toAddress: recipient,
+        memo: memo,
+        blockchain: currentBlockchain,
+        fee: fee,
+        description: `Sent to ${recipient.substring(0, 6)}...${recipient.substring(recipient.length - 4)}`
+    };
     
-    // Add to transaction history
-    addTransaction('Sent USDT', `To: ${recipient.substring(0, 6)}...${recipient.substring(recipient.length - 4)}`, -amount, 'USDT');
+    addTransaction(transaction);
+    
+    sendModal.style.display = 'none';
+    showSuccess(`Successfully sent ${formatCurrency(amount)} USDT to ${recipient.substring(0, 6)}...${recipient.substring(recipient.length - 4)}`, 'Transaction Sent');
     
     // Reset form
     resetSendForm();
@@ -343,52 +578,89 @@ function confirmSendHandler() {
 
 // Basic address validation
 function isValidAddress(address) {
+    // Basic validation - in real app, use proper blockchain-specific validation
     return address.length >= 20 && address.length <= 60 && /^[a-zA-Z0-9]+$/.test(address);
+}
+
+// Calculate transaction fee based on blockchain and gas option
+function calculateTransactionFee() {
+    const baseFee = blockchainNetworks[currentBlockchain].baseFee;
+    const multiplier = gasOptionsData[currentGasOption].multiplier;
+    return baseFee * multiplier;
 }
 
 // Handle adding funds (creating custom coin)
 function addFundHandler() {
-    const coinName = document.getElementById('coin-name').value;
-    const coinLogo = document.getElementById('coin-logo-text').value || 'C';
-    const amount = parseFloat(document.getElementById('coin-amount').value);
+    const name = coinName.value.trim();
+    const symbol = coinSymbol.value.trim().toUpperCase();
+    const logoUrl = coinLogoUrl.value.trim();
+    const amount = parseFloat(coinAmount.value);
     
-    if (!coinName || !amount) {
-        alert('Please fill in all required fields');
+    if (!name || !symbol || !amount) {
+        showError('Please fill in all required fields');
         return;
     }
     
     if (amount <= 0) {
-        alert('Amount must be greater than 0');
+        showError('Amount must be greater than 0');
+        return;
+    }
+    
+    // Check if symbol already exists
+    if (availableCoins.some(coin => coin.symbol === symbol)) {
+        showError('A coin with this symbol already exists');
         return;
     }
     
     // Create new coin object
     const newCoin = {
-        id: Date.now(),
-        name: coinName,
-        symbol: coinLogo.substring(0, 3).toUpperCase(),
-        logo: coinLogo.substring(0, 2).toUpperCase(),
-        amount: amount,
-        value: amount,
-        change: '+0.0%'
+        symbol: symbol,
+        name: name,
+        logo: logoUrl || 'https://cryptologos.cc/logos/tether-usdt-logo.png',
+        price: 1.00,
+        balance: amount,
+        pnl: 0,
+        sl: 0.95,
+        change: 0,
+        color: getRandomColor()
     };
     
-    // Add to custom coins array
-    customCoins.push(newCoin);
+    // Add to available coins
+    availableCoins.push(newCoin);
     
     // Update wallet balance
     walletBalance += amount;
     updateBalanceDisplay();
     
+    // Create transaction record
+    const transaction = {
+        id: Date.now(),
+        type: 'deposit',
+        coin: symbol,
+        amount: amount,
+        value: amount,
+        status: 'completed',
+        timestamp: new Date(),
+        description: `Added ${symbol} funds`
+    };
+    
+    addTransaction(transaction);
+    
     // Show success
     fundModal.style.display = 'none';
-    showSuccess(`Successfully added ${formatCurrency(amount)} ${newCoin.symbol}`, 'Funds Added');
-    
-    // Add to transaction history
-    addTransaction('Received Funds', `Added ${newCoin.symbol}`, amount, newCoin.symbol);
+    showSuccess(`Successfully added ${formatCurrency(amount)} ${symbol}`, 'Funds Added');
     
     // Reset form
     resetFundForm();
+    
+    // Update UI
+    populateCoinList();
+}
+
+// Get random color for new coins
+function getRandomColor() {
+    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'];
+    return colors[Math.floor(Math.random() * colors.length)];
 }
 
 // Handle swap confirmation
@@ -398,14 +670,20 @@ function confirmSwapHandler() {
     const fromAmount = parseFloat(swapFromAmount.value);
     
     if (!fromAmount || fromAmount <= 0) {
-        alert('Please enter a valid amount');
+        showError('Please enter a valid amount');
         return;
     }
     
     // Check if user has enough balance
     const fromCoin = availableCoins.find(coin => coin.symbol === fromCoinElement);
     if (fromAmount > fromCoin.balance) {
-        alert(`Insufficient ${fromCoin.symbol} balance`);
+        showError(`Insufficient ${fromCoin.symbol} balance`);
+        return;
+    }
+    
+    // Check if swapping to same coin
+    if (fromCoinElement === toCoinElement) {
+        showError('Cannot swap to the same coin');
         return;
     }
     
@@ -482,8 +760,19 @@ function completeSwap(fromSymbol, toSymbol, fromAmount) {
     updateBalanceDisplay();
     updateCoinDisplays();
     
-    // Add to transaction history
-    addTransaction('Swapped', `${fromSymbol} to ${toSymbol}`, toAmount, toSymbol);
+    // Create transaction record
+    const transaction = {
+        id: Date.now(),
+        type: 'swap',
+        coin: toSymbol,
+        amount: toAmount,
+        value: toAmount * toCoin.price,
+        status: 'completed',
+        timestamp: new Date(),
+        description: `Swapped ${fromAmount} ${fromSymbol} to ${toAmount.toFixed(6)} ${toSymbol}`
+    };
+    
+    addTransaction(transaction);
     
     // Close modals and show success
     swapProgressModal.style.display = 'none';
@@ -492,33 +781,49 @@ function completeSwap(fromSymbol, toSymbol, fromAmount) {
 }
 
 // Add transaction to history
-function addTransaction(title, description, amount, currency) {
+function addTransaction(transaction) {
+    transactions.unshift(transaction);
+    saveTransactionHistory();
+    updateTransactionHistory();
+}
+
+// Update transaction history display
+function updateTransactionHistory() {
     const transactionHistory = document.querySelector('.transaction-history');
-    const transactionItem = document.createElement('div');
-    transactionItem.className = 'transaction-item';
+    transactionHistory.innerHTML = '';
     
-    const isPositive = amount > 0;
-    const iconColor = isPositive ? '#4caf50' : '#f44336';
-    const iconClass = isPositive ? 'fa-arrow-down' : 'fa-arrow-up';
+    // Show only last 5 transactions
+    const recentTransactions = transactions.slice(0, 5);
     
-    transactionItem.innerHTML = `
-        <div class="transaction-details">
-            <div class="transaction-icon" style="background-color: ${iconColor};">
-                <i class="fas ${iconClass}"></i>
+    recentTransactions.forEach(transaction => {
+        const transactionItem = document.createElement('div');
+        transactionItem.className = 'transaction-item';
+        
+        const isPositive = transaction.amount > 0;
+        const iconColor = isPositive ? '#4caf50' : '#f44336';
+        const iconClass = isPositive ? 'fa-arrow-down' : 'fa-arrow-up';
+        const typeText = isPositive ? 'Received' : 'Sent';
+        
+        transactionItem.innerHTML = `
+            <div class="transaction-details">
+                <div class="transaction-icon" style="background-color: ${iconColor};">
+                    <i class="fas ${iconClass}"></i>
+                </div>
+                <div class="transaction-info">
+                    <h4>${typeText} ${transaction.coin}</h4>
+                    <p>${transaction.description}</p>
+                </div>
             </div>
-            <div class="transaction-info">
-                <h4>${title}</h4>
-                <p>${description}</p>
+            <div class="transaction-amount">
+                <div class="value" style="color: ${isPositive ? '#4caf50' : '#f44336'}">
+                    ${isPositive ? '+' : ''}${Math.abs(transaction.amount).toLocaleString()} ${transaction.coin}
+                </div>
+                <div class="status">Completed</div>
             </div>
-        </div>
-        <div class="transaction-amount">
-            <div class="value" style="color: ${isPositive ? '#4caf50' : '#f44336'}">${isPositive ? '+' : ''}${amount} ${currency}</div>
-            <div class="status">Completed</div>
-        </div>
-    `;
-    
-    // Add to the top of transaction history
-    transactionHistory.insertBefore(transactionItem, transactionHistory.firstChild);
+        `;
+        
+        transactionHistory.appendChild(transactionItem);
+    });
 }
 
 // Calculate swap amount
@@ -561,7 +866,9 @@ function populateCoinList() {
         const coinOption = document.createElement('div');
         coinOption.className = 'coin-option';
         coinOption.innerHTML = `
-            <div class="coin-logo" style="background-color: ${coin.logoColor};">${coin.symbol}</div>
+            <div class="coin-logo">
+                <img src="${coin.logo}" alt="${coin.symbol}" onerror="this.src='https://cryptologos.cc/logos/tether-usdt-logo.png'">
+            </div>
             <div>
                 <div style="font-weight: bold;">${coin.symbol}</div>
                 <div style="font-size: 12px; color: var(--text-secondary);">${coin.name}</div>
@@ -595,13 +902,17 @@ function filterCoinList() {
 function selectCoinForSwap(coin) {
     if (swapDirection === 'from') {
         swapFromCoin.innerHTML = `
-            <div class="coin-logo" style="background-color: ${coin.logoColor};">${coin.symbol}</div>
+            <div class="coin-logo">
+                <img src="${coin.logo}" alt="${coin.symbol}" onerror="this.src='https://cryptologos.cc/logos/tether-usdt-logo.png'">
+            </div>
             <div class="coin-name">${coin.symbol}</div>
             <i class="fas fa-chevron-down"></i>
         `;
     } else {
         swapToCoin.innerHTML = `
-            <div class="coin-logo" style="background-color: ${coin.logoColor};">${coin.symbol}</div>
+            <div class="coin-logo">
+                <img src="${coin.logo}" alt="${coin.symbol}" onerror="this.src='https://cryptologos.cc/logos/tether-usdt-logo.png'">
+            </div>
             <div class="coin-name">${coin.symbol}</div>
             <i class="fas fa-chevron-down"></i>
         `;
@@ -609,12 +920,6 @@ function selectCoinForSwap(coin) {
     
     coinSelectModal.style.display = 'none';
     calculateSwapToAmount();
-}
-
-// Update logo preview
-function updateLogoPreview() {
-    const text = coinLogoText.value.substring(0, 2).toUpperCase();
-    logoPreview.textContent = text || 'C';
 }
 
 // Select tab
@@ -639,63 +944,62 @@ function selectTab(tabName) {
 // Select blockchain option
 function selectBlockchain(event) {
     const selected = event.currentTarget;
-    const parent = selected.parentElement;
+    currentBlockchain = selected.dataset.chain;
     
     // Remove active class from all options
-    parent.querySelectorAll('.blockchain-option').forEach(option => {
+    selected.parentElement.querySelectorAll('.blockchain-option').forEach(option => {
         option.classList.remove('active');
     });
     
     // Add active class to selected option
     selected.classList.add('active');
+    
+    // Update gas prices based on blockchain
+    updateGasPrices();
 }
 
-// Select mover tag
-function selectMoverTag(event) {
+// Select gas option
+function selectGasOption(event) {
     const selected = event.currentTarget;
-    const parent = selected.parentElement;
+    const gasType = selected.querySelector('.gas-type').textContent.toLowerCase();
+    currentGasOption = Object.keys(gasOptionsData).find(key => gasOptionsData[key].name.toLowerCase() === gasType);
     
-    // Remove active class from all tags
-    parent.querySelectorAll('.mover-tag').forEach(tag => {
-        tag.classList.remove('active');
+    // Remove active class from all options
+    selected.parentElement.querySelectorAll('.gas-option').forEach(option => {
+        option.classList.remove('active');
     });
     
-    // Add active class to selected tag
+    // Add active class to selected option
     selected.classList.add('active');
     
-    // In a real app, you would filter content based on the tag
-    console.log('Mover tag selected:', selected.textContent);
+    // Update network fee display
+    updateGasPrices();
 }
 
-// Select nav item
-function selectNavItem(event) {
-    const selected = event.currentTarget;
-    const parent = selected.parentElement;
+// Update gas prices based on blockchain and selected option
+function updateGasPrices() {
+    const baseFee = blockchainNetworks[currentBlockchain].baseFee;
+    const multiplier = gasOptionsData[currentGasOption].multiplier;
+    const fee = baseFee * multiplier;
     
-    // Remove active class from all items
-    parent.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    
-    // Add active class to selected item
-    selected.classList.add('active');
-    
-    // In a real app, you would navigate to different sections
-    console.log('Nav item selected:', selected.textContent);
+    feeAmount.textContent = `$${fee.toFixed(2)}`;
 }
 
 // Reset send form
 function resetSendForm() {
-    document.querySelector('#send-modal .input-field[placeholder="Enter wallet address"]').value = '';
-    document.getElementById('send-amount').value = '';
+    recipientAddress.value = '';
+    sendAmount.value = '';
+    sendMemo.value = '';
+    clearValidationErrors();
 }
 
 // Reset fund form
 function resetFundForm() {
-    document.getElementById('coin-name').value = '';
-    document.getElementById('coin-logo-text').value = '';
-    document.getElementById('coin-amount').value = '';
-    logoPreview.textContent = 'C';
+    coinName.value = '';
+    coinSymbol.value = '';
+    coinLogoUrl.value = '';
+    coinAmount.value = '';
+    clearValidationErrors();
 }
 
 // Show success message
@@ -703,6 +1007,55 @@ function showSuccess(message, title) {
     document.getElementById('success-title').textContent = title;
     document.getElementById('success-message').textContent = message;
     successModal.style.display = 'flex';
+}
+
+// Show error message
+function showError(message) {
+    // Simple error display - in real app, use a proper notification system
+    alert(`Error: ${message}`);
+}
+
+// Form validation functions
+function validateAddress() {
+    const address = recipientAddress.value.trim();
+    if (address && !isValidAddress(address)) {
+        showFieldError(recipientAddress, 'Invalid wallet address format');
+    } else {
+        clearFieldError(recipientAddress);
+    }
+}
+
+function validateSendAmount() {
+    const amount = parseFloat(sendAmount.value);
+    if (amount && amount > usdtBalance) {
+        showFieldError(sendAmount, 'Insufficient USDT balance');
+    } else {
+        clearFieldError(sendAmount);
+    }
+}
+
+function validateFundForm() {
+    // Basic validation for fund form
+    const symbol = coinSymbol.value.trim();
+    if (symbol && availableCoins.some(coin => coin.symbol === symbol.toUpperCase())) {
+        showFieldError(coinSymbol, 'Coin symbol already exists');
+    } else {
+        clearFieldError(coinSymbol);
+    }
+}
+
+function showFieldError(field, message) {
+    field.classList.add('input-error');
+    // In real app, show error message near the field
+}
+
+function clearFieldError(field) {
+    field.classList.remove('input-error');
+}
+
+function clearValidationErrors() {
+    const errorFields = document.querySelectorAll('.input-error');
+    errorFields.forEach(field => field.classList.remove('input-error'));
 }
 
 // Save custom coins to localStorage
@@ -714,43 +1067,127 @@ function saveCustomCoins() {
 function loadCustomCoins() {
     const storedCoins = localStorage.getItem('customCoins');
     if (storedCoins) {
-        customCoins = JSON.parse(storedCoins);
+        const coins = JSON.parse(storedCoins);
+        coins.forEach(coin => {
+            if (!availableCoins.some(c => c.symbol === coin.symbol)) {
+                availableCoins.push(coin);
+            }
+        });
     }
 }
 
-// Update price changes randomly (for demo purposes)
-function updatePriceChanges() {
-    setInterval(() => {
-        // Update available coin prices randomly
-        availableCoins.forEach(coin => {
-            if (coin.symbol !== 'USDT') {
-                const change = (Math.random() - 0.5) * 0.1; // -5% to +5%
-                coin.price *= (1 + change);
+// Save transaction history to localStorage
+function saveTransactionHistory() {
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+}
+
+// Load transaction history from localStorage
+function loadTransactionHistory() {
+    const storedTransactions = localStorage.getItem('transactions');
+    if (storedTransactions) {
+        transactions = JSON.parse(storedTransactions);
+        updateTransactionHistory();
+    }
+}
+
+// Add sample transactions for demo
+function addSampleTransactions() {
+    const sampleTransactions = [
+        {
+            id: Date.now() - 1000000,
+            type: 'send',
+            coin: 'USDT',
+            amount: -1000,
+            value: 1000,
+            status: 'completed',
+            timestamp: new Date(Date.now() - 86400000),
+            description: 'Sent to 0x1a2b...3c4d · BSC'
+        },
+        {
+            id: Date.now() - 2000000,
+            type: 'swap',
+            coin: 'USDT',
+            amount: 2450,
+            value: 2450,
+            status: 'completed',
+            timestamp: new Date(Date.now() - 172800000),
+            description: 'Swapped BNB to USDT · PancakeSwap'
+        },
+        {
+            id: Date.now() - 3000000,
+            type: 'deposit',
+            coin: 'USDT',
+            amount: 5000,
+            value: 5000,
+            status: 'completed',
+            timestamp: new Date(Date.now() - 259200000),
+            description: 'Received from 0x5e6f...7g8h · Ethereum'
+        }
+    ];
+    
+    sampleTransactions.forEach(transaction => {
+        transactions.push(transaction);
+    });
+    
+    saveTransactionHistory();
+    updateTransactionHistory();
+}
+
+// Start price updates simulation
+function startPriceUpdates() {
+    priceUpdateInterval = setInterval(updatePrices, 10000); // Update every 10 seconds
+}
+
+// Update prices randomly (for demo purposes)
+function updatePrices() {
+    availableCoins.forEach(coin => {
+        if (coin.symbol !== 'USDT') {
+            // Generate random price change between -2% and +2%
+            const change = (Math.random() - 0.5) * 4;
+            const oldPrice = coin.price;
+            coin.price *= (1 + change / 100);
+            coin.change = change;
+            
+            // Update PnL based on price change
+            if (coin.balance > 0) {
+                const valueChange = (coin.price - oldPrice) * coin.balance;
+                coin.pnl += valueChange;
             }
-        });
-        
-        // Update displayed changes
-        const changes = document.querySelectorAll('.crypto-amount .change');
-        changes.forEach(changeElement => {
-            const change = (Math.random() - 0.4) * 10; // -4% to +6%
-            const isPositive = change >= 0;
-            changeElement.textContent = `${isPositive ? '+' : ''}${change.toFixed(2)}%`;
-            changeElement.className = `change ${isPositive ? '' : 'negative'}`;
-        });
-        
-        // Update wallet balance based on new prices
-        walletBalance = usdtBalance + 
-                       bnbBalance * availableCoins.find(c => c.symbol === 'BNB').price +
-                       trxBalance * availableCoins.find(c => c.symbol === 'TRX').price +
-                       trumpBalance * availableCoins.find(c => c.symbol === 'TRUMP').price;
-        
-        updateBalanceDisplay();
-        
-    }, 10000); // Update every 10 seconds
+        }
+    });
+    
+    // Update displayed changes and PnL
+    updatePnLDisplays();
+    
+    // Update wallet balance
+    walletBalance = usdtBalance + 
+                   bnbBalance * availableCoins.find(c => c.symbol === 'BNB').price +
+                   trxBalance * availableCoins.find(c => c.symbol === 'TRX').price +
+                   trumpBalance * availableCoins.find(c => c.symbol === 'TRUMP').price;
+    
+    updateBalanceDisplay();
+}
+
+// Update network status indicator
+function updateNetworkStatus() {
+    const isOnline = navigator.onLine;
+    // In real app, update UI to show online/offline status
+    console.log(`Network status: ${isOnline ? 'Online' : 'Offline'}`);
 }
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', init);
+
+// Handle page visibility change
+document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+        // Page is hidden, slow down updates
+        clearInterval(priceUpdateInterval);
+    } else {
+        // Page is visible, resume updates
+        startPriceUpdates();
+    }
+});
 
 // Export functions for use in other modules (if needed)
 if (typeof module !== 'undefined' && module.exports) {
@@ -758,6 +1195,7 @@ if (typeof module !== 'undefined' && module.exports) {
         formatCurrency,
         formatNumber,
         calculatePriceImpact,
-        isValidAddress
+        isValidAddress,
+        calculateTransactionFee
     };
 }
