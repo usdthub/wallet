@@ -1,5 +1,6 @@
 /* style.css */
 
+/* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -7,14 +8,46 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+:root {
+    --primary: #1e50a0;
+    --secondary: #2a5db0;
+    --accent: #4caf50;
+    --danger: #f44336;
+    --dark: #0a0e17;
+    --card: #1a2236;
+    --text: #ffffff;
+    --text-secondary: #8f9bba;
+}
+
 body {
-    background-color: #0a0e17;
-    color: white;
+    background-color: var(--dark);
+    color: var(--text);
     padding: 20px;
     max-width: 400px;
     margin: 0 auto;
+    padding-bottom: 80px;
 }
 
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 20px;
+    color: var(--accent);
+}
+
+.user-menu {
+    font-size: 18px;
+    color: var(--text-secondary);
+}
+
+/* Balance Section */
 .balance-section {
     text-align: center;
     margin-bottom: 25px;
@@ -27,10 +60,41 @@ body {
 }
 
 .balance-change {
-    color: #4caf50;
+    color: var(--accent);
     font-size: 14px;
 }
 
+.pump-dump-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.pump-button, .dump-button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.pump-button:hover, .dump-button:hover {
+    opacity: 0.9;
+}
+
+.pump-button {
+    background-color: var(--accent);
+    color: white;
+}
+
+.dump-button {
+    background-color: var(--danger);
+    color: white;
+}
+
+/* Navigation Buttons */
 .nav-buttons {
     display: flex;
     justify-content: space-between;
@@ -38,9 +102,9 @@ body {
 }
 
 .nav-button {
-    background-color: #1a2236;
+    background-color: var(--card);
     border: none;
-    color: white;
+    color: var(--text);
     padding: 12px 0;
     width: 18%;
     border-radius: 12px;
@@ -50,11 +114,12 @@ body {
 }
 
 .nav-button:hover {
-    background-color: #252f48;
+    background-color: var(--secondary);
 }
 
+/* Banner */
 .banner {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
     border-radius: 16px;
     padding: 16px;
     margin-bottom: 25px;
@@ -69,15 +134,21 @@ body {
 }
 
 .banner-cta {
-    background-color: white;
-    color: #667eea;
+    background-color: var(--text);
+    color: var(--primary);
     border: none;
     padding: 8px 12px;
     border-radius: 20px;
     font-weight: bold;
     cursor: pointer;
+    transition: transform 0.2s;
 }
 
+.banner-cta:hover {
+    transform: translateX(5px);
+}
+
+/* Tabs */
 .tabs {
     display: flex;
     margin-bottom: 20px;
@@ -90,70 +161,96 @@ body {
     font-weight: bold;
     border-bottom: 2px solid transparent;
     cursor: pointer;
+    transition: color 0.3s;
 }
 
 .tab.active {
-    border-bottom: 2px solid #667eea;
-    color: #667eea;
+    border-bottom: 2px solid var(--accent);
+    color: var(--accent);
+}
+
+.tab:hover:not(.active) {
+    color: var(--text-secondary);
+}
+
+/* Crypto List */
+.crypto-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
 }
 
 .crypto-card {
-    background-color: #1a2236;
+    background-color: var(--card);
     border-radius: 16px;
     padding: 16px;
-    margin-bottom: 20px;
-}
-
-.crypto-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    transition: transform 0.2s;
 }
 
-.crypto-name {
-    font-weight: bold;
-    font-size: 18px;
+.crypto-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.crypto-change {
-    color: #4caf50;
-    font-size: 14px;
-}
-
-.crypto-details {
+.crypto-info {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.crypto-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.crypto-details h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.crypto-details p {
+    font-size: 14px;
+    color: var(--text-secondary);
 }
 
 .crypto-amount {
-    font-size: 20px;
-    font-weight: bold;
+    text-align: right;
 }
 
-.crypto-value {
-    font-size: 20px;
+.crypto-amount .value {
+    font-size: 16px;
     font-weight: bold;
+    margin-bottom: 4px;
 }
 
-.manage-button {
-    background-color: #252f48;
-    color: white;
-    border: none;
-    padding: 10px 0;
-    width: 100%;
-    border-radius: 12px;
-    margin-top: 15px;
-    font-weight: bold;
-    cursor: pointer;
+.crypto-amount .change {
+    font-size: 14px;
+    color: var(--accent);
 }
 
+.crypto-amount .change.negative {
+    color: var(--danger);
+}
+
+/* Section Titles */
 .section-title {
     font-weight: bold;
     margin-bottom: 15px;
     font-size: 18px;
 }
 
+/* Mover Tags */
 .mover-tags {
     display: flex;
     gap: 10px;
@@ -161,27 +258,39 @@ body {
 }
 
 .mover-tag {
-    background-color: #252f48;
+    background-color: var(--card);
     padding: 6px 12px;
     border-radius: 20px;
     font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .mover-tag.active {
-    background-color: #667eea;
+    background-color: var(--accent);
+}
+
+.mover-tag:hover:not(.active) {
+    background-color: var(--secondary);
 }
 
 .mover-subtitle {
     font-size: 14px;
-    color: #8f9bba;
+    color: var(--text-secondary);
     margin-bottom: 15px;
 }
 
+/* Mover Cards */
 .mover-card {
-    background-color: #1a2236;
+    background-color: var(--card);
     border-radius: 16px;
     padding: 16px;
     margin-bottom: 15px;
+    transition: transform 0.2s;
+}
+
+.mover-card:hover {
+    transform: translateY(-2px);
 }
 
 .mover-header {
@@ -196,7 +305,7 @@ body {
 
 .mover-stats {
     font-size: 12px;
-    color: #8f9bba;
+    color: var(--text-secondary);
 }
 
 .mover-price {
@@ -205,34 +314,108 @@ body {
 }
 
 .mover-change {
-    color: #4caf50;
+    color: var(--accent);
     font-size: 14px;
 }
 
+.mover-change.negative {
+    color: var(--danger);
+}
+
+/* Transaction History */
+.transaction-history {
+    margin-top: 20px;
+}
+
+.transaction-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--card);
+    transition: background-color 0.2s;
+}
+
+.transaction-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.transaction-details {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.transaction-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.transaction-info h4 {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.transaction-info p {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.transaction-amount {
+    text-align: right;
+}
+
+.transaction-amount .value {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.transaction-amount .status {
+    font-size: 12px;
+    color: var(--accent);
+}
+
+/* Bottom Navigation */
 .bottom-nav {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #0a0e17;
+    background-color: var(--dark);
     display: flex;
     justify-content: space-around;
     padding: 15px 0;
-    border-top: 1px solid #1a2236;
+    border-top: 1px solid var(--card);
     max-width: 400px;
     margin: 0 auto;
+    z-index: 10;
 }
 
 .nav-item {
     text-align: center;
-    color: #8f9bba;
+    color: var(--text-secondary);
     font-size: 12px;
+    cursor: pointer;
+    transition: color 0.3s;
 }
 
 .nav-item.active {
-    color: #667eea;
+    color: var(--accent);
 }
 
+.nav-item:hover:not(.active) {
+    color: var(--text);
+}
+
+/* Modal Styles */
 .modal {
     display: none;
     position: fixed;
@@ -244,14 +427,28 @@ body {
     z-index: 100;
     align-items: center;
     justify-content: center;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .modal-content {
-    background-color: #1a2236;
+    background-color: var(--card);
     width: 90%;
     max-width: 350px;
     border-radius: 16px;
     padding: 20px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 .modal-header {
@@ -269,9 +466,14 @@ body {
 .close-modal {
     background: none;
     border: none;
-    color: white;
+    color: var(--text);
     font-size: 24px;
     cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-modal:hover {
+    color: var(--accent);
 }
 
 .input-group {
@@ -281,7 +483,7 @@ body {
 .input-label {
     display: block;
     margin-bottom: 8px;
-    color: #8f9bba;
+    color: var(--text-secondary);
 }
 
 .input-field {
@@ -289,8 +491,14 @@ body {
     padding: 12px;
     border-radius: 8px;
     border: 1px solid #2d374d;
-    background-color: #0a0e17;
-    color: white;
+    background-color: var(--dark);
+    color: var(--text);
+    transition: border-color 0.3s;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: var(--primary);
 }
 
 .coin-selector {
@@ -298,13 +506,22 @@ body {
     align-items: center;
     gap: 10px;
     margin-bottom: 15px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: var(--dark);
+    transition: background-color 0.3s;
+}
+
+.coin-selector:hover {
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .coin-logo {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background-color: #667eea;
+    background-color: var(--secondary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -316,8 +533,8 @@ body {
 }
 
 .modal-button {
-    background-color: #667eea;
-    color: white;
+    background-color: var(--primary);
+    color: var(--text);
     border: none;
     padding: 14px;
     width: 100%;
@@ -325,6 +542,16 @@ body {
     font-weight: bold;
     cursor: pointer;
     margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.modal-button:hover {
+    background-color: var(--secondary);
+}
+
+.modal-button:disabled {
+    background-color: var(--text-secondary);
+    cursor: not-allowed;
 }
 
 .blockchain-selector {
@@ -334,14 +561,19 @@ body {
 }
 
 .blockchain-option {
-    background-color: #252f48;
+    background-color: var(--dark);
     padding: 8px 12px;
     border-radius: 8px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .blockchain-option.active {
-    background-color: #667eea;
+    background-color: var(--primary);
+}
+
+.blockchain-option:hover:not(.active) {
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .success-message {
@@ -352,19 +584,27 @@ body {
 .success-icon {
     font-size: 48px;
     margin-bottom: 15px;
+    color: var(--accent);
+    animation: scaleIn 0.5s;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
 }
 
 .logo-input {
     display: flex;
     gap: 10px;
     margin-bottom: 15px;
+    align-items: center;
 }
 
 .logo-preview {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #667eea;
+    background-color: var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -372,10 +612,148 @@ body {
     font-size: 20px;
 }
 
-/* Responsive adjustments */
+/* Swap Styles */
+.swap-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.swap-input {
+    background-color: var(--dark);
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.swap-input:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.swap-amount {
+    font-size: 18px;
+    font-weight: bold;
+    background: none;
+    border: none;
+    color: var(--text);
+    width: 60%;
+}
+
+.swap-amount:focus {
+    outline: none;
+}
+
+.swap-coin {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--card);
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.swap-coin:hover {
+    background-color: var(--secondary);
+}
+
+.swap-arrow {
+    text-align: center;
+    font-size: 24px;
+    color: var(--accent);
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-5px); }
+    60% { transform: translateY(-3px); }
+}
+
+.coin-list {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.coin-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.coin-option:hover {
+    background-color: var(--dark);
+}
+
+.coin-price {
+    margin-left: auto;
+    font-weight: bold;
+}
+
+.pl-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: var(--dark);
+    border-radius: 8px;
+}
+
+.pl-positive {
+    color: var(--accent);
+}
+
+.pl-negative {
+    color: var(--danger);
+}
+
+/* Progress Bar */
+.progress-bar {
+    height: 4px;
+    background-color: var(--dark);
+    border-radius: 2px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--accent);
+    width: 0%;
+    transition: width 2s;
+}
+
+.swap-status {
+    text-align: center;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+/* Loading Animation */
+.fa-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
 @media (max-width: 480px) {
     body {
         padding: 15px;
+        padding-bottom: 80px;
     }
     
     .total-balance {
@@ -398,4 +776,32 @@ body {
     .crypto-card, .mover-card {
         padding: 12px;
     }
+    
+    .pump-dump-controls {
+        flex-direction: column;
+    }
+    
+    .modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary);
 }
