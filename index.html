@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Wallet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0a0e17;
+            color: white;
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .balance-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .total-balance {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .balance-change {
+            color: #4caf50;
+            font-size: 14px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+        
+        .nav-button {
+            background-color: #1a2236;
+            border: none;
+            color: white;
+            padding: 12px 0;
+            width: 18%;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: #252f48;
+        }
+        
+        .banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .banner-text {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .banner-cta {
+            background-color: white;
+            color: #667eea;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 0;
+            width: 50%;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+        }
+        
+        .tab.active {
+            border-bottom: 2px solid #667eea;
+            color: #667eea;
+        }
+        
+        .crypto-card {
+            background-color: #1a2236;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .crypto-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .crypto-name {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .crypto-change {
+            color: #4caf50;
+            font-size: 14px;
+        }
+        
+        .crypto-details {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .crypto-amount {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .crypto-value {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .manage-button {
+            background-color: #252f48;
+            color: white;
+            border: none;
+            padding: 10px 0;
+            width: 100%;
+            border-radius: 12px;
+            margin-top: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .mover-tags {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .mover-tag {
+            background-color: #252f48;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .mover-tag.active {
+            background-color: #667eea;
+        }
+        
+        .mover-card {
+            background-color: #1a2236;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .mover-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .mover-name {
+            font-weight: bold;
+        }
+        
+        .mover-stats {
+            font-size: 12px;
+            color: #8f9bba;
+        }
+        
+        .mover-price {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .mover-change {
+            color: #4caf50;
+            font-size: 14px;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #0a0e17;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid #1a2236;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .nav-item {
+            text-align: center;
+            color: #8f9bba;
+            font-size: 12px;
+        }
+        
+        .nav-item.active {
+            color: #667eea;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: #1a2236;
+            width: 90%;
+            max-width: 350px;
+            border-radius: 16px;
+            padding: 20px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #8f9bba;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #2d374d;
+            background-color: #0a0e17;
+            color: white;
+        }
+        
+        .coin-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .coin-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .coin-name {
+            font-weight: bold;
+        }
+        
+        .modal-button {
+            background-color: #667eea;
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .blockchain-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .blockchain-option {
+            background-color: #252f48;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .blockchain-option.active {
+            background-color: #667eea;
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .success-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .logo-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .logo-preview {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Balance Section -->
+    <div class="balance-section">
+        <div class="total-balance" id="balance">$10,806,370,737.65</div>
+        <div class="balance-change">$0.05 (+3.53%)</div>
+    </div>
+    
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+        <button class="nav-button" id="send-btn">Send</button>
+        <button class="nav-button" id="fund-btn">Fund</button>
+        <button class="nav-button">Swap</button>
+        <button class="nav-button">Sell</button>
+        <button class="nav-button">Earn</button>
+    </div>
+    
+    <!-- Banner -->
+    <div class="banner">
+        <div class="banner-text">Bridge to Solana seamlessly</div>
+        <button class="banner-cta">Start now →</button>
+    </div>
+    
+    <!-- Tabs -->
+    <div class="tabs">
+        <div class="tab active">Crypto</div>
+        <div class="tab">NFTs</div>
+    </div>
+    
+    <!-- Crypto Card -->
+    <div class="crypto-card">
+        <div class="crypto-header">
+            <div class="crypto-name">SUTER</div>
+            <div class="crypto-change">$0.04216 +3.53%</div>
+        </div>
+        <div class="crypto-details">
+            <div class="crypto-amount">39,299.67</div>
+            <div class="crypto-value">$1.65</div>
+        </div>
+        <button class="manage-button">Manage crypto</button>
+    </div>
+    
+    <!-- Top Movers Section -->
+    <div class="section-title">Top movers</div>
+    
+    <div class="mover-tags">
+        <div class="mover-tag active">Memes</div>
+        <div class="mover-tag">x402</div>
+        <div class="mover-tag">RWAs</div>
+    </div>
+    
+    <div class="mover-subtitle">Top meme coins and tokens (24h % price gain)</div>
+    
+    <!-- Mover Cards -->
+    <div class="mover-card">
+        <div class="mover-header">
+            <div class="mover-name">Priceless</div>
+            <div class="mover-stats">MCap: $2.44M · Vol: $3.03M</div>
+        </div>
+        <div class="mover-price">$0.0024</div>
+        <div class="mover-change">+245.58%</div>
+    </div>
+    
+    <div class="mover-card">
+        <div class="mover-header">
+            <div class="mover-name">MOO DENG</div>
+            <div class="mover-stats">MCap: $6.53M · Vol: $3.43M</div>
+        </div>
+        <div class="mover-price">$0.000015</div>
+        <div class="mover-change">+24.2%</div>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active">Home</div>
+        <div class="nav-item">Trending</div>
+        <div class="nav-item">Swap</div>
+        <div class="nav-item">Earn</div>
+        <div class="nav-item">Discover</div>
+    </div>
+    
+    <!-- Send Modal -->
+    <div class="modal" id="send-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Send Crypto</div>
+                <button class="close-modal" id="close-send-modal">&times;</button>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Recipient Address</label>
+                <input type="text" class="input-field" placeholder="Enter wallet address">
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Amount</label>
+                <input type="text" class="input-field" placeholder="0.00">
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Select Coin</label>
+                <div class="coin-selector">
+                    <div class="coin-logo">USDT</div>
+                    <div class="coin-name">USDT</div>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Blockchain</label>
+                <div class="blockchain-selector">
+                    <div class="blockchain-option active">Ethereum</div>
+                    <div class="blockchain-option">BSC</div>
+                    <div class="blockchain-option">Polygon</div>
+                </div>
+            </div>
+            
+            <button class="modal-button" id="confirm-send">Send</button>
+        </div>
+    </div>
+    
+    <!-- Fund Modal -->
+    <div class="modal" id="fund-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Add Funds</div>
+                <button class="close-modal" id="close-fund-modal">&times;</button>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Coin Name</label>
+                <input type="text" class="input-field" id="coin-name" placeholder="Enter coin name">
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Coin Logo</label>
+                <div class="logo-input">
+                    <div class="logo-preview" id="logo-preview">C</div>
+                    <input type="text" class="input-field" id="coin-logo-text" placeholder="Enter logo text (1-2 chars)">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Amount</label>
+                <input type="text" class="input-field" id="coin-amount" placeholder="Enter amount">
+            </div>
+            
+            <button class="modal-button" id="add-fund">Add Funds</button>
+        </div>
+    </div>
+    
+    <!-- Success Modal -->
+    <div class="modal" id="success-modal">
+        <div class="modal-content">
+            <div class="success-message">
+                <div class="success-icon">✓</div>
+                <div class="modal-title">Transaction Successful</div>
+                <p>Your transaction has been completed successfully.</p>
+                <button class="modal-button" id="close-success-modal">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const sendBtn = document.getElementById('send-btn');
+        const fundBtn = document.getElementById('fund-btn');
+        const sendModal = document.getElementById('send-modal');
+        const fundModal = document.getElementById('fund-modal');
+        const successModal = document.getElementById('success-modal');
+        const closeSendModal = document.getElementById('close-send-modal');
+        const closeFundModal = document.getElementById('close-fund-modal');
+        const confirmSend = document.getElementById('confirm-send');
+        const addFund = document.getElementById('add-fund');
+        const closeSuccessModal = document.getElementById('close-success-modal');
+        const coinLogoText = document.getElementById('coin-logo-text');
+        const logoPreview = document.getElementById('logo-preview');
+        const balanceElement = document.getElementById('balance');
+
+        // Event Listeners
+        sendBtn.addEventListener('click', () => {
+            sendModal.style.display = 'flex';
+        });
+        
+        fundBtn.addEventListener('click', () => {
+            fundModal.style.display = 'flex';
+        });
+        
+        closeSendModal.addEventListener('click', () => {
+            sendModal.style.display = 'none';
+        });
+        
+        closeFundModal.addEventListener('click', () => {
+            fundModal.style.display = 'none';
+        });
+        
+        confirmSend.addEventListener('click', () => {
+            sendModal.style.display = 'none';
+            successModal.style.display = 'flex';
+        });
+        
+        addFund.addEventListener('click', () => {
+            const coinName = document.getElementById('coin-name').value;
+            const coinAmount = document.getElementById('coin-amount').value;
+            
+            if (coinName && coinAmount) {
+                fundModal.style.display = 'none';
+                successModal.style.display = 'flex';
+                
+                // Here you would typically add the new coin to the wallet
+                // For this demo, we'll just show a success message
+            }
+        });
+        
+        closeSuccessModal.addEventListener('click', () => {
+            successModal.style.display = 'none';
+        });
+        
+        // Update logo preview when text changes
+        coinLogoText.addEventListener('input', () => {
+            const text = coinLogoText.value.substring(0, 2).toUpperCase();
+            logoPreview.textContent = text || 'C';
+        });
+        
+        // Close modals when clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target === sendModal) {
+                sendModal.style.display = 'none';
+            }
+            if (event.target === fundModal) {
+                fundModal.style.display = 'none';
+            }
+            if (event.target === successModal) {
+                successModal.style.display = 'none';
+            }
+        });
+        
+        // Format balance with commas
+        function formatBalance(balance) {
+            return '$' + parseFloat(balance).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+        
+        // Set initial balance
+        balanceElement.textContent = formatBalance('10806370737.65');
+    </script>
+</body>
+</html>
