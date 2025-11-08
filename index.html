@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Wallet</title>
+    <title>Trust Wallet - Secure Crypto Wallet</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,14 +14,16 @@
         }
         
         :root {
-            --primary: #1e50a0;
+            --primary: #3375bb;
             --secondary: #2a5db0;
             --accent: #4caf50;
             --danger: #f44336;
+            --warning: #ff9800;
             --dark: #0a0e17;
             --card: #1a2236;
             --text: #ffffff;
             --text-secondary: #8f9bba;
+            --border: #2d374d;
         }
         
         body {
@@ -31,6 +33,7 @@
             max-width: 400px;
             margin: 0 auto;
             padding-bottom: 80px;
+            background: linear-gradient(135deg, #0a0e17 0%, #1a2236 100%);
         }
         
         .header {
@@ -38,12 +41,36 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            padding-top: 10px;
         }
         
         .logo {
             font-weight: bold;
             font-size: 20px;
-            color: var(--accent);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background-color: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .user-menu {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .user-menu i {
+            font-size: 18px;
+            color: var(--text-secondary);
         }
         
         .balance-section {
@@ -62,6 +89,37 @@
             font-size: 14px;
         }
         
+        .pump-dump-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .pump-button, .dump-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .pump-button:hover, .dump-button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .pump-button {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .dump-button {
+            background-color: var(--danger);
+            color: white;
+        }
+        
         .nav-buttons {
             display: flex;
             justify-content: space-between;
@@ -77,11 +135,12 @@
             border-radius: 12px;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
         }
         
         .nav-button:hover {
             background-color: var(--secondary);
+            transform: translateY(-2px);
         }
         
         .banner {
@@ -107,11 +166,17 @@
             border-radius: 20px;
             font-weight: bold;
             cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .banner-cta:hover {
+            transform: translateX(5px);
         }
         
         .tabs {
             display: flex;
             margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
         }
         
         .tab {
@@ -121,11 +186,16 @@
             font-weight: bold;
             border-bottom: 2px solid transparent;
             cursor: pointer;
+            transition: color 0.3s;
         }
         
         .tab.active {
             border-bottom: 2px solid var(--accent);
             color: var(--accent);
+        }
+        
+        .tab:hover:not(.active) {
+            color: var(--text-secondary);
         }
         
         .crypto-list {
@@ -142,6 +212,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .crypto-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         
         .crypto-info {
@@ -154,12 +231,18 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background-color: var(--secondary);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             font-size: 16px;
+            overflow: hidden;
+        }
+        
+        .crypto-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         .crypto-details h3 {
@@ -184,7 +267,39 @@
         
         .crypto-amount .change {
             font-size: 14px;
+        }
+        
+        .change.positive {
             color: var(--accent);
+        }
+        
+        .change.negative {
+            color: var(--danger);
+        }
+        
+        .pnl-section {
+            display: flex;
+            gap: 15px;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+        
+        .pnl-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .pnl-label {
+            color: var(--text-secondary);
+        }
+        
+        .pnl-value.positive {
+            color: var(--accent);
+        }
+        
+        .pnl-value.negative {
+            color: var(--danger);
         }
         
         .section-title {
@@ -197,6 +312,8 @@
             display: flex;
             gap: 10px;
             margin-bottom: 15px;
+            overflow-x: auto;
+            padding-bottom: 5px;
         }
         
         .mover-tag {
@@ -205,10 +322,16 @@
             border-radius: 20px;
             font-size: 14px;
             cursor: pointer;
+            transition: background-color 0.3s;
+            white-space: nowrap;
         }
         
         .mover-tag.active {
             background-color: var(--accent);
+        }
+        
+        .mover-tag:hover:not(.active) {
+            background-color: var(--secondary);
         }
         
         .mover-subtitle {
@@ -222,6 +345,12 @@
             border-radius: 16px;
             padding: 16px;
             margin-bottom: 15px;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        
+        .mover-card:hover {
+            transform: translateY(-2px);
         }
         
         .mover-header {
@@ -245,286 +374,7 @@
         }
         
         .mover-change {
-            color: var(--accent);
             font-size: 14px;
-        }
-        
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: var(--dark);
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            border-top: 1px solid var(--card);
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        
-        .nav-item {
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 12px;
-            cursor: pointer;
-        }
-        
-        .nav-item.active {
-            color: var(--accent);
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 100;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
-            background-color: var(--card);
-            width: 90%;
-            max-width: 350px;
-            border-radius: 16px;
-            padding: 20px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .modal-title {
-            font-size: 20px;
-            font-weight: bold;
-        }
-        
-        .close-modal {
-            background: none;
-            border: none;
-            color: var(--text);
-            font-size: 24px;
-            cursor: pointer;
-        }
-        
-        .input-group {
-            margin-bottom: 15px;
-        }
-        
-        .input-label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-secondary);
-        }
-        
-        .input-field {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #2d374d;
-            background-color: var(--dark);
-            color: var(--text);
-        }
-        
-        .coin-selector {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 8px;
-            background-color: var(--dark);
-        }
-        
-        .coin-logo {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: var(--secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
-        .coin-name {
-            font-weight: bold;
-        }
-        
-        .modal-button {
-            background-color: var(--primary);
-            color: var(--text);
-            border: none;
-            padding: 14px;
-            width: 100%;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        
-        .blockchain-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .blockchain-option {
-            background-color: var(--dark);
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        
-        .blockchain-option.active {
-            background-color: var(--primary);
-        }
-        
-        .success-message {
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .success-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-            color: var(--accent);
-        }
-        
-        .logo-input {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .logo-preview {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 20px;
-        }
-        
-        .pump-dump-controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .pump-button, .dump-button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        
-        .pump-button {
-            background-color: var(--accent);
-            color: white;
-        }
-        
-        .dump-button {
-            background-color: var(--danger);
-            color: white;
-        }
-        
-        .swap-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .swap-input {
-            background-color: var(--dark);
-            padding: 15px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .swap-amount {
-            font-size: 18px;
-            font-weight: bold;
-            background: none;
-            border: none;
-            color: var(--text);
-            width: 60%;
-        }
-        
-        .swap-coin {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background-color: var(--card);
-            padding: 8px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-        
-        .swap-arrow {
-            text-align: center;
-            font-size: 24px;
-            color: var(--accent);
-        }
-        
-        .coin-list {
-            max-height: 200px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
-        
-        .coin-option {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        
-        .coin-option:hover {
-            background-color: var(--dark);
-        }
-        
-        .coin-price {
-            margin-left: auto;
-            font-weight: bold;
-        }
-        
-        .pl-indicator {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-            padding: 10px;
-            background-color: var(--dark);
-            border-radius: 8px;
-        }
-        
-        .pl-positive {
-            color: var(--accent);
-        }
-        
-        .pl-negative {
-            color: var(--danger);
         }
         
         .transaction-history {
@@ -535,7 +385,15 @@
             display: flex;
             justify-content: space-between;
             padding: 12px 0;
-            border-bottom: 1px solid var(--card);
+            border-bottom: 1px solid var(--border);
+            transition: background-color 0.2s;
+        }
+        
+        .transaction-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding-left: 10px;
+            padding-right: 10px;
         }
         
         .transaction-details {
@@ -579,6 +437,369 @@
             color: var(--accent);
         }
         
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--dark);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid var(--border);
+            max-width: 400px;
+            margin: 0 auto;
+            z-index: 10;
+        }
+        
+        .nav-item {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: color 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .nav-item.active {
+            color: var(--accent);
+        }
+        
+        .nav-item:hover:not(.active) {
+            color: var(--text);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background-color: var(--card);
+            width: 90%;
+            max-width: 400px;
+            border-radius: 16px;
+            padding: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--accent);
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background-color: var(--dark);
+            color: var(--text);
+            transition: border-color 0.3s;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .coin-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: var(--dark);
+            transition: background-color 0.3s;
+        }
+        
+        .coin-selector:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .coin-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            overflow: hidden;
+        }
+        
+        .coin-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .coin-name {
+            font-weight: bold;
+        }
+        
+        .modal-button {
+            background-color: var(--primary);
+            color: var(--text);
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .modal-button:hover {
+            background-color: var(--secondary);
+        }
+        
+        .modal-button:disabled {
+            background-color: var(--text-secondary);
+            cursor: not-allowed;
+        }
+        
+        .blockchain-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .blockchain-option {
+            background-color: var(--dark);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .blockchain-option.active {
+            background-color: var(--primary);
+        }
+        
+        .blockchain-option:hover:not(.active) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .blockchain-logo {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        
+        .blockchain-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .memo-field {
+            margin-top: 10px;
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .success-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: var(--accent);
+            animation: scaleIn 0.5s;
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+        
+        .logo-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        
+        .logo-preview {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .swap-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .swap-input {
+            background-color: var(--dark);
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        
+        .swap-input:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .swap-amount {
+            font-size: 18px;
+            font-weight: bold;
+            background: none;
+            border: none;
+            color: var(--text);
+            width: 60%;
+        }
+        
+        .swap-amount:focus {
+            outline: none;
+        }
+        
+        .swap-coin {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--card);
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .swap-coin:hover {
+            background-color: var(--secondary);
+        }
+        
+        .swap-arrow {
+            text-align: center;
+            font-size: 24px;
+            color: var(--accent);
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-5px); }
+            60% { transform: translateY(-3px); }
+        }
+        
+        .coin-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        
+        .coin-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .coin-option:hover {
+            background-color: var(--dark);
+        }
+        
+        .coin-price {
+            margin-left: auto;
+            font-weight: bold;
+        }
+        
+        .pl-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: var(--dark);
+            border-radius: 8px;
+        }
+        
+        .pl-positive {
+            color: var(--accent);
+        }
+        
+        .pl-negative {
+            color: var(--danger);
+        }
+        
         .progress-bar {
             height: 4px;
             background-color: var(--dark);
@@ -599,14 +820,201 @@
             margin: 10px 0;
             font-weight: bold;
         }
+        
+        .network-fee {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .fee-amount {
+            color: var(--text-secondary);
+        }
+        
+        .qr-scanner {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background-color: var(--dark);
+            margin: 0 auto;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .qr-icon {
+            font-size: 48px;
+            color: var(--text-secondary);
+        }
+        
+        .scan-text {
+            color: var(--text-secondary);
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .contact-item:hover {
+            background-color: var(--dark);
+        }
+        
+        .contact-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .contact-name {
+            font-weight: bold;
+        }
+        
+        .contact-address {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .gas-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .gas-option {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: var(--dark);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .gas-option:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .gas-option.active {
+            background-color: var(--primary);
+        }
+        
+        .gas-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .gas-type {
+            font-weight: bold;
+        }
+        
+        .gas-details {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .gas-price {
+            font-weight: bold;
+        }
+        
+        .fa-spin {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+                padding-bottom: 80px;
+            }
+            
+            .total-balance {
+                font-size: 28px;
+            }
+            
+            .nav-button {
+                padding: 10px 0;
+                font-size: 14px;
+            }
+            
+            .banner {
+                padding: 12px;
+            }
+            
+            .banner-text {
+                font-size: 14px;
+            }
+            
+            .crypto-card, .mover-card {
+                padding: 12px;
+            }
+            
+            .pump-dump-controls {
+                flex-direction: column;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
+        }
     </style>
 </head>
 <body>
     <!-- Header -->
     <div class="header">
-        <div class="logo">CryptoWallet</div>
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            Trust Wallet
+        </div>
         <div class="user-menu">
             <i class="fas fa-bell"></i>
+            <i class="fas fa-cog"></i>
         </div>
     </div>
     
@@ -624,11 +1032,26 @@
     
     <!-- Navigation Buttons -->
     <div class="nav-buttons">
-        <button class="nav-button" id="send-btn">Send</button>
-        <button class="nav-button" id="fund-btn">Fund</button>
-        <button class="nav-button" id="swap-btn">Swap</button>
-        <button class="nav-button">Sell</button>
-        <button class="nav-button">Earn</button>
+        <button class="nav-button" id="send-btn">
+            <i class="fas fa-paper-plane"></i>
+            <div>Send</div>
+        </button>
+        <button class="nav-button" id="fund-btn">
+            <i class="fas fa-wallet"></i>
+            <div>Fund</div>
+        </button>
+        <button class="nav-button" id="swap-btn">
+            <i class="fas fa-exchange-alt"></i>
+            <div>Swap</div>
+        </button>
+        <button class="nav-button">
+            <i class="fas fa-chart-line"></i>
+            <div>Sell</div>
+        </button>
+        <button class="nav-button">
+            <i class="fas fa-coins"></i>
+            <div>Earn</div>
+        </button>
     </div>
     
     <!-- Banner -->
@@ -646,9 +1069,11 @@
     <!-- Crypto List -->
     <div class="crypto-list" id="crypto-tab">
         <!-- USDT Card -->
-        <div class="crypto-card">
+        <div class="crypto-card" data-coin="USDT">
             <div class="crypto-info">
-                <div class="crypto-logo" style="background-color: #26a17a;">USDT</div>
+                <div class="crypto-logo">
+                    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="USDT">
+                </div>
                 <div class="crypto-details">
                     <h3>Tether</h3>
                     <p>USDT</p>
@@ -656,14 +1081,26 @@
             </div>
             <div class="crypto-amount">
                 <div class="value" id="usdt-amount">81,763,673 USDT</div>
-                <div class="change">$81,763,673</div>
+                <div class="change positive">+0.1%</div>
+                <div class="pnl-section">
+                    <div class="pnl-item">
+                        <span class="pnl-label">PNL:</span>
+                        <span class="pnl-value positive">+$1,245.67</span>
+                    </div>
+                    <div class="pnl-item">
+                        <span class="pnl-label">SL:</span>
+                        <span class="pnl-value">$0.998</span>
+                    </div>
+                </div>
             </div>
         </div>
         
         <!-- BNB Card -->
-        <div class="crypto-card">
+        <div class="crypto-card" data-coin="BNB">
             <div class="crypto-info">
-                <div class="crypto-logo" style="background-color: #f3ba2f;">BNB</div>
+                <div class="crypto-logo">
+                    <img src="https://cryptologos.cc/logos/bnb-bnb-logo.png" alt="BNB">
+                </div>
                 <div class="crypto-details">
                     <h3>Binance Coin</h3>
                     <p>BNB</p>
@@ -671,14 +1108,26 @@
             </div>
             <div class="crypto-amount">
                 <div class="value" id="bnb-amount">467 BNB</div>
-                <div class="change">+2.4%</div>
+                <div class="change positive">+2.4%</div>
+                <div class="pnl-section">
+                    <div class="pnl-item">
+                        <span class="pnl-label">PNL:</span>
+                        <span class="pnl-value positive">+$3,456.78</span>
+                    </div>
+                    <div class="pnl-item">
+                        <span class="pnl-label">SL:</span>
+                        <span class="pnl-value">$320.50</span>
+                    </div>
+                </div>
             </div>
         </div>
         
         <!-- TRX Card -->
-        <div class="crypto-card">
+        <div class="crypto-card" data-coin="TRX">
             <div class="crypto-info">
-                <div class="crypto-logo" style="background-color: #ff060a;">TRX</div>
+                <div class="crypto-logo">
+                    <img src="https://cryptologos.cc/logos/tron-trx-logo.png" alt="TRX">
+                </div>
                 <div class="crypto-details">
                     <h3>TRON</h3>
                     <p>TRX</p>
@@ -686,14 +1135,26 @@
             </div>
             <div class="crypto-amount">
                 <div class="value" id="trx-amount">839,878,828 TRX</div>
-                <div class="change">+1.8%</div>
+                <div class="change positive">+1.8%</div>
+                <div class="pnl-section">
+                    <div class="pnl-item">
+                        <span class="pnl-label">PNL:</span>
+                        <span class="pnl-value positive">+$2,134.56</span>
+                    </div>
+                    <div class="pnl-item">
+                        <span class="pnl-label">SL:</span>
+                        <span class="pnl-value">$0.115</span>
+                    </div>
+                </div>
             </div>
         </div>
         
         <!-- TRUMP Card -->
-        <div class="crypto-card">
+        <div class="crypto-card" data-coin="TRUMP">
             <div class="crypto-info">
-                <div class="crypto-logo" style="background-color: #c41e3a;">TRUMP</div>
+                <div class="crypto-logo">
+                    <img src="https://cryptologos.cc/logos/maga-trump-maga-logo.png" alt="TRUMP">
+                </div>
                 <div class="crypto-details">
                     <h3>Trump Coin</h3>
                     <p>TRUMP</p>
@@ -701,7 +1162,17 @@
             </div>
             <div class="crypto-amount">
                 <div class="value" id="trump-amount">986,672 TRUMP</div>
-                <div class="change">+5.2%</div>
+                <div class="change positive">+5.2%</div>
+                <div class="pnl-section">
+                    <div class="pnl-item">
+                        <span class="pnl-label">PNL:</span>
+                        <span class="pnl-value positive">+$1,567.89</span>
+                    </div>
+                    <div class="pnl-item">
+                        <span class="pnl-label">SL:</span>
+                        <span class="pnl-value">$0.78</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -710,7 +1181,9 @@
     <div class="crypto-list" id="nfts-tab" style="display: none;">
         <div class="crypto-card">
             <div class="crypto-info">
-                <div class="crypto-logo" style="background-color: #8a2be2;">NFT</div>
+                <div class="crypto-logo" style="background-color: #8a2be2;">
+                    <i class="fas fa-image"></i>
+                </div>
                 <div class="crypto-details">
                     <h3>Bored Ape #7421</h3>
                     <p>Ethereum</p>
@@ -724,7 +1197,9 @@
         
         <div class="crypto-card">
             <div class="crypto-info">
-                <div class="crypto-logo" style="background-color: #ff4500;">NFT</div>
+                <div class="crypto-logo" style="background-color: #ff4500;">
+                    <i class="fas fa-image"></i>
+                </div>
                 <div class="crypto-details">
                     <h3>CryptoPunk #5210</h3>
                     <p>Ethereum</p>
@@ -744,6 +1219,9 @@
         <div class="mover-tag active">Memes</div>
         <div class="mover-tag">x402</div>
         <div class="mover-tag">RWAs</div>
+        <div class="mover-tag">DeFi</div>
+        <div class="mover-tag">AI</div>
+        <div class="mover-tag">Gaming</div>
     </div>
     
     <div class="mover-subtitle">Top meme coins and tokens (24h % price gain)</div>
@@ -755,7 +1233,7 @@
             <div class="mover-stats">MCap: $2.44M · Vol: $3.03M</div>
         </div>
         <div class="mover-price">$0.0024</div>
-        <div class="mover-change">+245.58%</div>
+        <div class="mover-change positive">+245.58%</div>
     </div>
     
     <div class="mover-card">
@@ -764,7 +1242,7 @@
             <div class="mover-stats">MCap: $6.53M · Vol: $3.43M</div>
         </div>
         <div class="mover-price">$0.000015</div>
-        <div class="mover-change">+24.2%</div>
+        <div class="mover-change positive">+24.2%</div>
     </div>
     
     <!-- Transaction History -->
@@ -777,7 +1255,7 @@
                 </div>
                 <div class="transaction-info">
                     <h4>Sent USDT</h4>
-                    <p>To: 0x1a2b...3c4d</p>
+                    <p>To: 0x1a2b...3c4d · BSC</p>
                 </div>
             </div>
             <div class="transaction-amount">
@@ -793,7 +1271,7 @@
                 </div>
                 <div class="transaction-info">
                     <h4>Swapped BNB</h4>
-                    <p>To USDT</p>
+                    <p>To USDT · PancakeSwap</p>
                 </div>
             </div>
             <div class="transaction-amount">
@@ -809,7 +1287,7 @@
                 </div>
                 <div class="transaction-info">
                     <h4>Received USDT</h4>
-                    <p>From: 0x5e6f...7g8h</p>
+                    <p>From: 0x5e6f...7g8h · Ethereum</p>
                 </div>
             </div>
             <div class="transaction-amount">
@@ -851,9 +1329,16 @@
                 <button class="close-modal" id="close-send-modal">&times;</button>
             </div>
             
+            <div class="qr-scanner">
+                <div class="qr-placeholder">
+                    <i class="fas fa-qrcode qr-icon"></i>
+                    <div class="scan-text">Scan QR Code</div>
+                </div>
+            </div>
+            
             <div class="input-group">
                 <label class="input-label">Recipient Address</label>
-                <input type="text" class="input-field" placeholder="Enter wallet address">
+                <input type="text" class="input-field" id="recipient-address" placeholder="Enter wallet address or ENS name">
             </div>
             
             <div class="input-group">
@@ -864,18 +1349,76 @@
             <div class="input-group">
                 <label class="input-label">Select Coin</label>
                 <div class="coin-selector" id="send-coin-selector">
-                    <div class="coin-logo" style="background-color: #26a17a;">USDT</div>
+                    <div class="coin-logo">
+                        <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="USDT">
+                    </div>
                     <div class="coin-name">USDT</div>
+                    <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
             
             <div class="input-group">
                 <label class="input-label">Blockchain</label>
                 <div class="blockchain-selector">
-                    <div class="blockchain-option active">Ethereum</div>
-                    <div class="blockchain-option">BSC</div>
-                    <div class="blockchain-option">Polygon</div>
+                    <div class="blockchain-option active" data-chain="bsc">
+                        <div class="blockchain-logo">
+                            <img src="https://cryptologos.cc/logos/bnb-bnb-logo.png" alt="BSC">
+                        </div>
+                        <span>BSC</span>
+                    </div>
+                    <div class="blockchain-option" data-chain="ethereum">
+                        <div class="blockchain-logo">
+                            <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" alt="Ethereum">
+                        </div>
+                        <span>Ethereum</span>
+                    </div>
+                    <div class="blockchain-option" data-chain="polygon">
+                        <div class="blockchain-logo">
+                            <img src="https://cryptologos.cc/logos/polygon-matic-logo.png" alt="Polygon">
+                        </div>
+                        <span>Polygon</span>
+                    </div>
+                    <div class="blockchain-option" data-chain="tron">
+                        <div class="blockchain-logo">
+                            <img src="https://cryptologos.cc/logos/tron-trx-logo.png" alt="TRON">
+                        </div>
+                        <span>TRON</span>
+                    </div>
                 </div>
+            </div>
+            
+            <div class="input-group memo-field">
+                <label class="input-label">Memo (Optional)</label>
+                <input type="text" class="input-field" id="send-memo" placeholder="Required for some exchanges">
+            </div>
+            
+            <div class="gas-selector">
+                <div class="gas-option active">
+                    <div class="gas-info">
+                        <div class="gas-type">Standard</div>
+                        <div class="gas-details">~ 5 seconds</div>
+                    </div>
+                    <div class="gas-price">$1.23</div>
+                </div>
+                <div class="gas-option">
+                    <div class="gas-info">
+                        <div class="gas-type">Fast</div>
+                        <div class="gas-details">~ 3 seconds</div>
+                    </div>
+                    <div class="gas-price">$2.45</div>
+                </div>
+                <div class="gas-option">
+                    <div class="gas-info">
+                        <div class="gas-type">Instant</div>
+                        <div class="gas-details">~ 1 second</div>
+                    </div>
+                    <div class="gas-price">$4.89</div>
+                </div>
+            </div>
+            
+            <div class="network-fee">
+                <span>Network Fee</span>
+                <span class="fee-amount">$1.23</span>
             </div>
             
             <button class="modal-button" id="confirm-send">Send</button>
@@ -896,11 +1439,13 @@
             </div>
             
             <div class="input-group">
-                <label class="input-label">Coin Logo</label>
-                <div class="logo-input">
-                    <div class="logo-preview" id="logo-preview">C</div>
-                    <input type="text" class="input-field" id="coin-logo-text" placeholder="Enter logo text (1-2 chars)">
-                </div>
+                <label class="input-label">Coin Symbol</label>
+                <input type="text" class="input-field" id="coin-symbol" placeholder="e.g. BTC, ETH">
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Coin Logo URL</label>
+                <input type="text" class="input-field" id="coin-logo-url" placeholder="Paste image URL">
             </div>
             
             <div class="input-group">
@@ -924,7 +1469,9 @@
                 <div class="swap-input">
                     <input type="text" class="swap-amount" id="swap-from-amount" placeholder="0.0" value="100">
                     <div class="swap-coin" id="swap-from-coin">
-                        <div class="coin-logo" style="background-color: #26a17a;">USDT</div>
+                        <div class="coin-logo">
+                            <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="USDT">
+                        </div>
                         <div class="coin-name">USDT</div>
                         <i class="fas fa-chevron-down"></i>
                     </div>
@@ -937,7 +1484,9 @@
                 <div class="swap-input">
                     <input type="text" class="swap-amount" id="swap-to-amount" placeholder="0.0" readonly>
                     <div class="swap-coin" id="swap-to-coin">
-                        <div class="coin-logo" style="background-color: #f3ba2f;">BNB</div>
+                        <div class="coin-logo">
+                            <img src="https://cryptologos.cc/logos/bnb-bnb-logo.png" alt="BNB">
+                        </div>
                         <div class="coin-name">BNB</div>
                         <i class="fas fa-chevron-down"></i>
                     </div>
@@ -957,6 +1506,11 @@
             <div class="pl-indicator">
                 <div>Network Fee</div>
                 <div>$1.50</div>
+            </div>
+            
+            <div class="pl-indicator">
+                <div>Route</div>
+                <div>USDT → BNB</div>
             </div>
             
             <button class="modal-button" id="confirm-swap">Swap</button>
@@ -1029,8 +1583,6 @@
         const addFund = document.getElementById('add-fund');
         const confirmSwap = document.getElementById('confirm-swap');
         const closeSuccessModal = document.getElementById('close-success-modal');
-        const coinLogoText = document.getElementById('coin-logo-text');
-        const logoPreview = document.getElementById('logo-preview');
         const balanceElement = document.getElementById('balance');
         const pump1000Btn = document.getElementById('pump-1000');
         const dump3000Btn = document.getElementById('dump-3000');
@@ -1045,6 +1597,15 @@
         const tabs = document.querySelectorAll('.tab');
         const cryptoTab = document.getElementById('crypto-tab');
         const nftsTab = document.getElementById('nfts-tab');
+        const blockchainOptions = document.querySelectorAll('.blockchain-option');
+        const gasOptions = document.querySelectorAll('.gas-option');
+        const recipientAddress = document.getElementById('recipient-address');
+        const sendAmount = document.getElementById('send-amount');
+        const sendMemo = document.getElementById('send-memo');
+        const coinName = document.getElementById('coin-name');
+        const coinSymbol = document.getElementById('coin-symbol');
+        const coinLogoUrl = document.getElementById('coin-logo-url');
+        const coinAmount = document.getElementById('coin-amount');
 
         // Wallet state
         let walletBalance = 10806370737.65;
@@ -1055,21 +1616,27 @@
         let customCoins = [];
         let selectedCoinForSwap = null;
         let swapDirection = 'from'; // 'from' or 'to'
+        let currentBlockchain = 'bsc';
+        let currentGasOption = 'standard';
 
         // Available coins for swapping
         const availableCoins = [
-            { symbol: 'USDT', name: 'Tether', logoColor: '#26a17a', price: 1.00, balance: 81763673 },
-            { symbol: 'BNB', name: 'Binance Coin', logoColor: '#f3ba2f', price: 350.25, balance: 467 },
-            { symbol: 'BTC', name: 'Bitcoin', logoColor: '#f7931a', price: 42000.50, balance: 0 },
-            { symbol: 'ETH', name: 'Ethereum', logoColor: '#627eea', price: 2200.75, balance: 0 },
-            { symbol: 'TRX', name: 'TRON', logoColor: '#ff060a', price: 0.12, balance: 839878828 },
-            { symbol: 'TRUMP', name: 'Trump Coin', logoColor: '#c41e3a', price: 0.85, balance: 986672 },
-            { symbol: 'ADA', name: 'Cardano', logoColor: '#0033ad', price: 0.45, balance: 0 },
-            { symbol: 'DOT', name: 'Polkadot', logoColor: '#e6007a', price: 6.80, balance: 0 },
-            { symbol: 'XRP', name: 'Ripple', logoColor: '#23292f', price: 0.60, balance: 0 },
-            { symbol: 'DOGE', name: 'Dogecoin', logoColor: '#c2a633', price: 0.15, balance: 0 },
-            { symbol: 'SOL', name: 'Solana', logoColor: '#00ffbd', price: 100.25, balance: 0 },
-            { symbol: 'MATIC', name: 'Polygon', logoColor: '#8247e5', price: 0.85, balance: 0 }
+            { symbol: 'USDT', name: 'Tether', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png', price: 1.00, balance: 81763673, pnl: 1245.67, sl: 0.998 },
+            { symbol: 'BNB', name: 'Binance Coin', logo: 'https://cryptologos.cc/logos/bnb-bnb-logo.png', price: 350.25, balance: 467, pnl: 3456.78, sl: 320.50 },
+            { symbol: 'BTC', name: 'Bitcoin', logo: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png', price: 42000.50, balance: 0, pnl: 0, sl: 0 },
+            { symbol: 'ETH', name: 'Ethereum', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', price: 2200.75, balance: 0, pnl: 0, sl: 0 },
+            { symbol: 'TRX', name: 'TRON', logo: 'https://cryptologos.cc/logos/tron-trx-logo.png', price: 0.12, balance: 839878828, pnl: 2134.56, sl: 0.115 },
+            { symbol: 'TRUMP', name: 'Trump Coin', logo: 'https://cryptologos.cc/logos/maga-trump-maga-logo.png', price: 0.85, balance: 986672, pnl: 1567.89, sl: 0.78 },
+            { symbol: 'ADA', name: 'Cardano', logo: 'https://cryptologos.cc/logos/cardano-ada-logo.png', price: 0.45, balance: 0, pnl: 0, sl: 0 },
+            { symbol: 'DOT', name: 'Polkadot', logo: 'https://cryptologos.cc/logos/polkadot-new-dot-logo.png', price: 6.80, balance: 0, pnl: 0, sl: 0 },
+            { symbol: 'XRP', name: 'Ripple', logo: 'https://cryptologos.cc/logos/xrp-xrp-logo.png', price: 0.60, balance: 0, pnl: 0, sl: 0 },
+            { symbol: 'DOGE', name: 'Dogecoin', logo: 'https://cryptologos.cc/logos/dogecoin-doge-logo.png', price: 0.15, balance: 0, pnl: 0, sl: 0 },
+            { symbol: 'SOL', name: 'Solana', logo: 'https://cryptologos.cc/logos/solana-sol-logo.png', price: 100.25, balance: 0, pnl: 0, sl: 0 },
+            { symbol: 'MATIC', name: 'Polygon', logo: 'https://cryptologos.cc/logos/polygon-matic-logo.png', price: 0.85, balance: 0, pnl: 0, sl: 0 },
+            { symbol: 'LTC', name: 'Litecoin', logo: 'https://cryptologos.cc/logos/litecoin-ltc-logo.png', price: 75.30, balance: 0, pnl: 0, sl: 0 },
+            { symbol: 'LINK', name: 'Chainlink', logo: 'https://cryptologos.cc/logos/chainlink-link-logo.png', price: 15.75, balance: 0, pnl: 0, sl: 0 },
+            { symbol: 'XLM', name: 'Stellar', logo: 'https://cryptologos.cc/logos/stellar-xlm-logo.png', price: 0.12, balance: 0, pnl: 0, sl: 0 },
+            { symbol: 'BCH', name: 'Bitcoin Cash', logo: 'https://cryptologos.cc/logos/bitcoin-cash-bch-logo.png', price: 250.80, balance: 0, pnl: 0, sl: 0 }
         ];
 
         // Initialize the application
@@ -1079,6 +1646,8 @@
             setupEventListeners();
             loadCustomCoins();
             populateCoinList();
+            updatePriceChanges();
+            updateGasPrices();
         }
 
         // Set up all event listeners
@@ -1100,9 +1669,6 @@
             pump1000Btn.addEventListener('click', () => pumpDumpUSDT(1000));
             dump3000Btn.addEventListener('click', () => pumpDumpUSDT(-3000));
             
-            // Logo preview update
-            coinLogoText.addEventListener('input', updateLogoPreview);
-            
             // Swap coin selection
             swapFromCoin.addEventListener('click', () => openCoinSelectModal('from'));
             swapToCoin.addEventListener('click', () => openCoinSelectModal('to'));
@@ -1118,6 +1684,16 @@
                 tab.addEventListener('click', () => selectTab(tab.dataset.tab));
             });
             
+            // Blockchain selection
+            blockchainOptions.forEach(option => {
+                option.addEventListener('click', selectBlockchain);
+            });
+            
+            // Gas option selection
+            gasOptions.forEach(option => {
+                option.addEventListener('click', selectGasOption);
+            });
+            
             // Close modals when clicking outside
             window.addEventListener('click', (event) => {
                 if (event.target === sendModal) closeSendModalHandler();
@@ -1127,6 +1703,42 @@
                 if (event.target === successModal) closeSuccessModalHandler();
                 if (event.target === swapProgressModal) closeSwapProgressModalHandler();
             });
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', handleKeyboardShortcuts);
+        }
+
+        // Handle keyboard shortcuts
+        function handleKeyboardShortcuts(event) {
+            // Ctrl+1 for Send
+            if (event.ctrlKey && event.key === '1') {
+                event.preventDefault();
+                openSendModal();
+            }
+            // Ctrl+2 for Fund
+            else if (event.ctrlKey && event.key === '2') {
+                event.preventDefault();
+                openFundModal();
+            }
+            // Ctrl+3 for Swap
+            else if (event.ctrlKey && event.key === '3') {
+                event.preventDefault();
+                openSwapModal();
+            }
+            // Escape to close modals
+            else if (event.key === 'Escape') {
+                closeAllModals();
+            }
+        }
+
+        // Close all open modals
+        function closeAllModals() {
+            sendModal.style.display = 'none';
+            fundModal.style.display = 'none';
+            swapModal.style.display = 'none';
+            coinSelectModal.style.display = 'none';
+            successModal.style.display = 'none';
+            swapProgressModal.style.display = 'none';
         }
 
         // Update the balance display with proper formatting
@@ -1173,6 +1785,7 @@
         // Open send modal
         function openSendModal() {
             sendModal.style.display = 'flex';
+            updateGasPrices();
         }
 
         // Open fund modal
@@ -1190,6 +1803,8 @@
         function openCoinSelectModal(direction) {
             swapDirection = direction;
             coinSelectModal.style.display = 'flex';
+            coinSearch.value = '';
+            filterCoinList(); // Reset filter
         }
 
         // Close send modal
@@ -1226,11 +1841,12 @@
 
         // Handle send confirmation
         function confirmSendHandler() {
-            const recipient = document.querySelector('#send-modal .input-field[placeholder="Enter wallet address"]').value;
-            const amount = parseFloat(document.getElementById('send-amount').value);
+            const recipient = recipientAddress.value;
+            const amount = parseFloat(sendAmount.value);
+            const memo = sendMemo.value;
             
             if (!recipient || !amount) {
-                alert('Please fill in all fields');
+                alert('Please fill in all required fields');
                 return;
             }
             
@@ -1244,6 +1860,12 @@
                 return;
             }
             
+            // Validate recipient address (basic check)
+            if (!isValidAddress(recipient)) {
+                alert('Please enter a valid wallet address');
+                return;
+            }
+            
             // Update balances
             usdtBalance -= amount;
             walletBalance -= amount;
@@ -1252,19 +1874,28 @@
             updateCoinDisplays();
             
             sendModal.style.display = 'none';
-            showSuccess(`Successfully sent ${formatCurrency(amount)} USDT`, 'Transaction Sent');
+            showSuccess(`Successfully sent ${formatCurrency(amount)} USDT to ${recipient.substring(0, 6)}...${recipient.substring(recipient.length - 4)}`, 'Transaction Sent');
+            
+            // Add to transaction history
+            addTransaction('Sent USDT', `To: ${recipient.substring(0, 6)}...${recipient.substring(recipient.length - 4)} · ${currentBlockchain.toUpperCase()}`, -amount, 'USDT');
             
             // Reset form
             resetSendForm();
         }
 
+        // Basic address validation
+        function isValidAddress(address) {
+            return address.length >= 20 && address.length <= 60 && /^[a-zA-Z0-9]+$/.test(address);
+        }
+
         // Handle adding funds (creating custom coin)
         function addFundHandler() {
-            const coinName = document.getElementById('coin-name').value;
-            const coinLogo = document.getElementById('coin-logo-text').value || 'C';
-            const amount = parseFloat(document.getElementById('coin-amount').value);
+            const name = coinName.value;
+            const symbol = coinSymbol.value;
+            const logoUrl = coinLogoUrl.value;
+            const amount = parseFloat(coinAmount.value);
             
-            if (!coinName || !amount) {
+            if (!name || !symbol || !amount) {
                 alert('Please fill in all required fields');
                 return;
             }
@@ -1277,16 +1908,18 @@
             // Create new coin object
             const newCoin = {
                 id: Date.now(),
-                name: coinName,
-                symbol: coinLogo.substring(0, 3).toUpperCase(),
-                logo: coinLogo.substring(0, 2).toUpperCase(),
+                name: name,
+                symbol: symbol.toUpperCase(),
+                logo: logoUrl || 'https://cryptologos.cc/logos/tether-usdt-logo.png',
                 amount: amount,
-                value: amount,
-                change: '+0.0%'
+                price: 1.00,
+                balance: amount,
+                pnl: 0,
+                sl: 0
             };
             
-            // Add to custom coins array
-            customCoins.push(newCoin);
+            // Add to available coins
+            availableCoins.push(newCoin);
             
             // Update wallet balance
             walletBalance += amount;
@@ -1295,6 +1928,9 @@
             // Show success
             fundModal.style.display = 'none';
             showSuccess(`Successfully added ${formatCurrency(amount)} ${newCoin.symbol}`, 'Funds Added');
+            
+            // Add to transaction history
+            addTransaction('Received Funds', `Added ${newCoin.symbol}`, amount, newCoin.symbol);
             
             // Reset form
             resetFundForm();
@@ -1357,11 +1993,29 @@
             fromCoin.balance -= fromAmount;
             toCoin.balance += toAmount;
             
-            // Update USDT balance specifically if involved
+            // Update specific coin balances
             if (fromSymbol === 'USDT') {
                 usdtBalance = fromCoin.balance;
             } else if (toSymbol === 'USDT') {
                 usdtBalance = toCoin.balance;
+            }
+            
+            if (fromSymbol === 'BNB') {
+                bnbBalance = fromCoin.balance;
+            } else if (toSymbol === 'BNB') {
+                bnbBalance = toCoin.balance;
+            }
+            
+            if (fromSymbol === 'TRX') {
+                trxBalance = fromCoin.balance;
+            } else if (toSymbol === 'TRX') {
+                trxBalance = toCoin.balance;
+            }
+            
+            if (fromSymbol === 'TRUMP') {
+                trumpBalance = fromCoin.balance;
+            } else if (toSymbol === 'TRUMP') {
+                trumpBalance = toCoin.balance;
             }
             
             // Update wallet balance (simplified)
@@ -1373,10 +2027,43 @@
             updateBalanceDisplay();
             updateCoinDisplays();
             
+            // Add to transaction history
+            addTransaction('Swapped', `${fromSymbol} to ${toSymbol}`, toAmount, toSymbol);
+            
             // Close modals and show success
             swapProgressModal.style.display = 'none';
             swapModal.style.display = 'none';
             showSuccess(`Successfully swapped ${fromAmount} ${fromSymbol} for ${toAmount.toFixed(6)} ${toSymbol}`, 'Swap Completed');
+        }
+
+        // Add transaction to history
+        function addTransaction(title, description, amount, currency) {
+            const transactionHistory = document.querySelector('.transaction-history');
+            const transactionItem = document.createElement('div');
+            transactionItem.className = 'transaction-item';
+            
+            const isPositive = amount > 0;
+            const iconColor = isPositive ? '#4caf50' : '#f44336';
+            const iconClass = isPositive ? 'fa-arrow-down' : 'fa-arrow-up';
+            
+            transactionItem.innerHTML = `
+                <div class="transaction-details">
+                    <div class="transaction-icon" style="background-color: ${iconColor};">
+                        <i class="fas ${iconClass}"></i>
+                    </div>
+                    <div class="transaction-info">
+                        <h4>${title}</h4>
+                        <p>${description}</p>
+                    </div>
+                </div>
+                <div class="transaction-amount">
+                    <div class="value" style="color: ${isPositive ? '#4caf50' : '#f44336'}">${isPositive ? '+' : ''}${Math.abs(amount)} ${currency}</div>
+                    <div class="status">Completed</div>
+                </div>
+            `;
+            
+            // Add to the top of transaction history
+            transactionHistory.insertBefore(transactionItem, transactionHistory.firstChild);
         }
 
         // Calculate swap amount
@@ -1394,7 +2081,21 @@
                 
                 // Update minimum received
                 document.getElementById('min-received').textContent = `${(toAmount * 0.99).toFixed(6)} ${toCoin.symbol}`;
+                
+                // Update price impact
+                const priceImpact = calculatePriceImpact(fromCoin, toCoin, fromAmount);
+                const priceImpactElement = document.querySelector('.pl-indicator .pl-positive');
+                priceImpactElement.textContent = `${priceImpact}%`;
+                priceImpactElement.className = priceImpact > 2 ? 'pl-negative' : 'pl-positive';
             }
+        }
+
+        // Calculate price impact for swap
+        function calculatePriceImpact(fromCoin, toCoin, amount) {
+            // Simplified price impact calculation
+            const baseImpact = 0.1;
+            const volumeImpact = amount / (fromCoin.price * fromCoin.balance) * 100;
+            return (baseImpact + volumeImpact).toFixed(2);
         }
 
         // Populate coin list for selection
@@ -1405,7 +2106,9 @@
                 const coinOption = document.createElement('div');
                 coinOption.className = 'coin-option';
                 coinOption.innerHTML = `
-                    <div class="coin-logo" style="background-color: ${coin.logoColor};">${coin.symbol}</div>
+                    <div class="coin-logo">
+                        <img src="${coin.logo}" alt="${coin.symbol}">
+                    </div>
                     <div>
                         <div style="font-weight: bold;">${coin.symbol}</div>
                         <div style="font-size: 12px; color: var(--text-secondary);">${coin.name}</div>
@@ -1439,13 +2142,17 @@
         function selectCoinForSwap(coin) {
             if (swapDirection === 'from') {
                 swapFromCoin.innerHTML = `
-                    <div class="coin-logo" style="background-color: ${coin.logoColor};">${coin.symbol}</div>
+                    <div class="coin-logo">
+                        <img src="${coin.logo}" alt="${coin.symbol}">
+                    </div>
                     <div class="coin-name">${coin.symbol}</div>
                     <i class="fas fa-chevron-down"></i>
                 `;
             } else {
                 swapToCoin.innerHTML = `
-                    <div class="coin-logo" style="background-color: ${coin.logoColor};">${coin.symbol}</div>
+                    <div class="coin-logo">
+                        <img src="${coin.logo}" alt="${coin.symbol}">
+                    </div>
                     <div class="coin-name">${coin.symbol}</div>
                     <i class="fas fa-chevron-down"></i>
                 `;
@@ -1453,12 +2160,6 @@
             
             coinSelectModal.style.display = 'none';
             calculateSwapToAmount();
-        }
-
-        // Update logo preview
-        function updateLogoPreview() {
-            const text = coinLogoText.value.substring(0, 2).toUpperCase();
-            logoPreview.textContent = text || 'C';
         }
 
         // Select tab
@@ -1480,18 +2181,77 @@
             }
         }
 
+        // Select blockchain option
+        function selectBlockchain(event) {
+            const selected = event.currentTarget;
+            currentBlockchain = selected.dataset.chain;
+            
+            // Remove active class from all options
+            selected.parentElement.querySelectorAll('.blockchain-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            
+            // Add active class to selected option
+            selected.classList.add('active');
+            
+            // Update gas prices based on blockchain
+            updateGasPrices();
+        }
+
+        // Select gas option
+        function selectGasOption(event) {
+            const selected = event.currentTarget;
+            currentGasOption = selected.querySelector('.gas-type').textContent.toLowerCase();
+            
+            // Remove active class from all options
+            selected.parentElement.querySelectorAll('.gas-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            
+            // Add active class to selected option
+            selected.classList.add('active');
+            
+            // Update network fee display
+            updateGasPrices();
+        }
+
+        // Update gas prices based on blockchain and selected option
+        function updateGasPrices() {
+            const feeAmount = document.querySelector('.fee-amount');
+            let fee = 1.23;
+            
+            // Adjust fee based on blockchain
+            if (currentBlockchain === 'ethereum') {
+                fee = 5.67;
+            } else if (currentBlockchain === 'polygon') {
+                fee = 0.12;
+            } else if (currentBlockchain === 'tron') {
+                fee = 0.05;
+            }
+            
+            // Adjust fee based on gas option
+            if (currentGasOption === 'fast') {
+                fee *= 2;
+            } else if (currentGasOption === 'instant') {
+                fee *= 4;
+            }
+            
+            feeAmount.textContent = `$${fee.toFixed(2)}`;
+        }
+
         // Reset send form
         function resetSendForm() {
-            document.querySelector('#send-modal .input-field[placeholder="Enter wallet address"]').value = '';
-            document.getElementById('send-amount').value = '';
+            recipientAddress.value = '';
+            sendAmount.value = '';
+            sendMemo.value = '';
         }
 
         // Reset fund form
         function resetFundForm() {
-            document.getElementById('coin-name').value = '';
-            document.getElementById('coin-logo-text').value = '';
-            document.getElementById('coin-amount').value = '';
-            logoPreview.textContent = 'C';
+            coinName.value = '';
+            coinSymbol.value = '';
+            coinLogoUrl.value = '';
+            coinAmount.value = '';
         }
 
         // Show success message
@@ -1512,6 +2272,53 @@
             if (storedCoins) {
                 customCoins = JSON.parse(storedCoins);
             }
+        }
+
+        // Update price changes randomly (for demo purposes)
+        function updatePriceChanges() {
+            setInterval(() => {
+                // Update available coin prices randomly
+                availableCoins.forEach(coin => {
+                    if (coin.symbol !== 'USDT') {
+                        const change = (Math.random() - 0.5) * 0.1; // -5% to +5%
+                        coin.price *= (1 + change);
+                        
+                        // Update PnL based on price change
+                        if (coin.balance > 0) {
+                            coin.pnl = (coin.price - 1) * coin.balance;
+                        }
+                    }
+                });
+                
+                // Update displayed changes
+                const changes = document.querySelectorAll('.crypto-amount .change');
+                changes.forEach(changeElement => {
+                    const change = (Math.random() - 0.4) * 10; // -4% to +6%
+                    const isPositive = change >= 0;
+                    changeElement.textContent = `${isPositive ? '+' : ''}${change.toFixed(2)}%`;
+                    changeElement.className = `change ${isPositive ? 'positive' : 'negative'}`;
+                });
+                
+                // Update PnL displays
+                const pnlElements = document.querySelectorAll('.pnl-value');
+                pnlElements.forEach((element, index) => {
+                    const coin = availableCoins[index];
+                    if (coin && coin.pnl) {
+                        const isPositive = coin.pnl >= 0;
+                        element.textContent = `${isPositive ? '+' : ''}$${Math.abs(coin.pnl).toFixed(2)}`;
+                        element.className = `pnl-value ${isPositive ? 'positive' : 'negative'}`;
+                    }
+                });
+                
+                // Update wallet balance based on new prices
+                walletBalance = usdtBalance + 
+                               bnbBalance * availableCoins.find(c => c.symbol === 'BNB').price +
+                               trxBalance * availableCoins.find(c => c.symbol === 'TRX').price +
+                               trumpBalance * availableCoins.find(c => c.symbol === 'TRUMP').price;
+                
+                updateBalanceDisplay();
+                
+            }, 10000); // Update every 10 seconds
         }
 
         // Initialize the app when DOM is loaded
