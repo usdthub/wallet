@@ -1,0 +1,401 @@
+/* style.css */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #0a0e17;
+    color: white;
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.balance-section {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.total-balance {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.balance-change {
+    color: #4caf50;
+    font-size: 14px;
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.nav-button {
+    background-color: #1a2236;
+    border: none;
+    color: white;
+    padding: 12px 0;
+    width: 18%;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.nav-button:hover {
+    background-color: #252f48;
+}
+
+.banner {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.banner-text {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.banner-cta {
+    background-color: white;
+    color: #667eea;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 0;
+    width: 50%;
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+}
+
+.tab.active {
+    border-bottom: 2px solid #667eea;
+    color: #667eea;
+}
+
+.crypto-card {
+    background-color: #1a2236;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.crypto-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.crypto-name {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.crypto-change {
+    color: #4caf50;
+    font-size: 14px;
+}
+
+.crypto-details {
+    display: flex;
+    justify-content: space-between;
+}
+
+.crypto-amount {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.crypto-value {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.manage-button {
+    background-color: #252f48;
+    color: white;
+    border: none;
+    padding: 10px 0;
+    width: 100%;
+    border-radius: 12px;
+    margin-top: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.section-title {
+    font-weight: bold;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.mover-tags {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.mover-tag {
+    background-color: #252f48;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.mover-tag.active {
+    background-color: #667eea;
+}
+
+.mover-subtitle {
+    font-size: 14px;
+    color: #8f9bba;
+    margin-bottom: 15px;
+}
+
+.mover-card {
+    background-color: #1a2236;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 15px;
+}
+
+.mover-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.mover-name {
+    font-weight: bold;
+}
+
+.mover-stats {
+    font-size: 12px;
+    color: #8f9bba;
+}
+
+.mover-price {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.mover-change {
+    color: #4caf50;
+    font-size: 14px;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #0a0e17;
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 0;
+    border-top: 1px solid #1a2236;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.nav-item {
+    text-align: center;
+    color: #8f9bba;
+    font-size: 12px;
+}
+
+.nav-item.active {
+    color: #667eea;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: #1a2236;
+    width: 90%;
+    max-width: 350px;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #8f9bba;
+}
+
+.input-field {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #2d374d;
+    background-color: #0a0e17;
+    color: white;
+}
+
+.coin-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.coin-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #667eea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.coin-name {
+    font-weight: bold;
+}
+
+.modal-button {
+    background-color: #667eea;
+    color: white;
+    border: none;
+    padding: 14px;
+    width: 100%;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.blockchain-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.blockchain-option {
+    background-color: #252f48;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.blockchain-option.active {
+    background-color: #667eea;
+}
+
+.success-message {
+    text-align: center;
+    padding: 20px;
+}
+
+.success-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.logo-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.logo-preview {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #667eea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    body {
+        padding: 15px;
+    }
+    
+    .total-balance {
+        font-size: 28px;
+    }
+    
+    .nav-button {
+        padding: 10px 0;
+        font-size: 14px;
+    }
+    
+    .banner {
+        padding: 12px;
+    }
+    
+    .banner-text {
+        font-size: 14px;
+    }
+    
+    .crypto-card, .mover-card {
+        padding: 12px;
+    }
+}
